@@ -5,13 +5,13 @@ import {create, getAll, remove, update} from "../controller/AdmissionTypeControl
 const router: Router = Router();
 
 router.route('/create')
-    .post(verifyJwtToken('admin'), create);
+    .post(verifyJwtToken(['admin']), create);
 
 router.route('/update/:id')
-    .put(verifyJwtToken('admin'), update);
+    .put(verifyJwtToken(['admin']), update);
 
 router.route('/delete/:id')
-    .delete(verifyJwtToken('admin'), remove);
+    .delete(verifyJwtToken(['admin']), remove);
 
 router.route('/all')
     .get(getAll);
