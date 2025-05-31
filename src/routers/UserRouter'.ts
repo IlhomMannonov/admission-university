@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {create_user, delete_my, get_user, get_users, getMe,} from "../controller/UserController";
+import {create_user, get_user, get_users, getMe,} from "../controller/UserController";
 import {verifyJwtToken} from "../middilwares/Security";
 
 const router: Router = Router();
