@@ -43,7 +43,7 @@ export const uploadFile = async (req: Request, res: Response, next: NextFunction
                     original_name: file.originalname,
                     file_name: file.filename,
                     file_size: file.size,
-                    href: `/root/sharq-qabul-files/${file.filename}`,
+                    href: `/root/admission_files/${file.filename}`,
                     file_type: getFileExtension(file.filename),
                 });
                 const savedAttachment = await attachmentRepository.save(attachment);
@@ -72,7 +72,7 @@ export const getFile = async (req: Request, res: Response, next: NextFunction): 
         const attachment = await attachmentRepository.findOne({where: {id: Number(file_id)}});
         if (!attachment) throw RestException.notFound("Fayl topilmadi");
 
-        const filePath = path.join('/root/sharq-qabul-files', attachment.file_name);
+        const filePath = path.join('/root/admission_files', attachment.file_name);
 
         if (!fs.existsSync(filePath)) {
             res.status(404).json({message: 'Fayl serverda mavjud emas!'});
@@ -88,7 +88,7 @@ export const getFile = async (req: Request, res: Response, next: NextFunction): 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = '/root/sharq-qabul-files'; // Fayllar saqlanadigan papkani ko'rsatish
+        const uploadPath = '/root/admission_files'; // Fayllar saqlanadigan papkani ko'rsatish
 
         // Papka mavjudligini tekshirish va kerak bo'lsa yaratish
         if (!fs.existsSync(uploadPath)) {

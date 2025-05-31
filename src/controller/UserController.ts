@@ -219,6 +219,14 @@ export const create_user = async (req: AuthenticatedRequest, res: Response, next
     }
 };
 
+export const statistic = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+
+    } catch (err) {
+        next(err)
+    }
+}
+
 export function generateRandomString(length: number): string {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';

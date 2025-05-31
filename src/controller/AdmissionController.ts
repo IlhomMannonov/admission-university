@@ -444,7 +444,7 @@ export const my_admission = async (req: AuthenticatedRequest, res: Response, nex
     }
 };
 
-//ARIZA STATUSINI O'ZGARITIRISH
+//ARIZA STATUSINI O'ZGARITIRISH  ADMIN
 export const update_status = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {admission_id, status} = req.body;
@@ -678,7 +678,7 @@ export const download_admission_request = async (
 
         if (!admission) throw RestException.notFound("Admission not found");
 
-        const templatePath = path.join(__dirname, "../templates/qayd.ejs");
+        const templatePath = "/root/admission_files/qayd.ejs";
 
         const base64Photo = user.photo
             ? user.photo.startsWith("data:image")
@@ -732,13 +732,13 @@ export const download_admission_request = async (
         await page.setContent(html, { waitUntil: "networkidle0" });
 
         const fileName = `qayd_varaqasi_${uuidv4()}.pdf`;
-        const filePath = path.join(__dirname, `../../storage/${fileName}`);
+        const filePath = `/root/admission_files/${fileName}`;
 
         await page.pdf({ path: filePath, format: "A4" });
         await browser.close();
 
         // ✅ Foydalanuvchiga faylni yuborish
-        res.download(filePath, "qayd_varaqasi.pdf", async (err) => {
+        res.download(filePath, "/root/admission_files/qayd_varaqasi.pdf", async (err) => {
             try {
                 await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
             } catch (unlinkErr) {

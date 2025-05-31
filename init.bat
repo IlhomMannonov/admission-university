@@ -1,7 +1,7 @@
 @echo off
 set SERVER=62.113.58.42
 set USERNAME=root
-set PASSWORD=Ahror2230
+set PASSWORD=57246Abs
 set LOCAL_DIR="B:\Projects Vue\admission_universitet\dist"
 set REMOTE_DIR=/root/admission
 

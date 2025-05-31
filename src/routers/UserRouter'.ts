@@ -5,18 +5,18 @@ import {verifyJwtToken} from "../middilwares/Security";
 const router: Router = Router();
 
 router.route('/me')
-    .get(verifyJwtToken, getMe);
+    .get(verifyJwtToken(), getMe);
 
 router.route('/get-user/:id')
-    .get(verifyJwtToken, get_user);
+    .get(verifyJwtToken(), get_user);
 
 router.route('/all')
-    .get(verifyJwtToken, get_users);
+    .get(verifyJwtToken(['admin', 'manager']), get_users);
 
 router.route('/delete-user/:id')
-    .delete(delete_my);
+    .delete(verifyJwtToken(['admin']));
 
 router.route('/create-user')
-    .post(verifyJwtToken, create_user);
+    .post(verifyJwtToken(['admin', 'manager']), create_user);
 
 export default router;

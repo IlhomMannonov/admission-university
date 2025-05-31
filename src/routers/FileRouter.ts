@@ -6,7 +6,7 @@ const router: Router = Router();
 
 
 router.route("/upload")
-    .post(verifyJwtToken, uploadFile);
+    .post(verifyJwtToken(), uploadFile);
 router.route("/get/:id")
     .get(getFile);
 

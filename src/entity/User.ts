@@ -1,5 +1,6 @@
 import {Column, Entity} from 'typeorm';
 import {BaseEntityFull} from "./template/BaseEntityFull";
+import {Role} from "./template/Role";
 
 @Entity('users')
 export class User extends BaseEntityFull {
@@ -74,5 +75,9 @@ export class User extends BaseEntityFull {
     @Column({type: 'varchar', length: 255, nullable: true})
     address!: string;
 
+    @Column({
+        type: 'enum', enum: Role, nullable: true, default: Role.USER
+    })
+    role!: Role;
 
 }

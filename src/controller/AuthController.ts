@@ -11,7 +11,7 @@ import {SmsCode} from "../entity/SmsCode";
 import {MoreThan} from "typeorm";
 import {isValidPassword, isValidUzbekPhone} from "../utils/CommonUtils";
 import jwt from "jsonwebtoken";
-import {create_contact} from "../Service/AmoCRMServise";
+import {Role} from "../entity/template/Role";
 
 const userRepository = AppDataSource.getRepository(User)
 const smsCodeRepository = AppDataSource.getRepository(SmsCode)
@@ -169,6 +169,10 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
         const user = await userRepository.findOne({where: {phone_number: phone, deleted: false, status: "active"}});
 
         if (!user) {
+            res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
+            return;
+        }
+        if (user.role !== Role.USER) {
             res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
             return;
         }
@@ -356,6 +360,10 @@ export const login_admin = async (req: Request, res: Response, next: NextFunctio
         const user = await userRepository.findOne({where: {phone_number: username, deleted: false}});
 
         if (!user) {
+            res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
+            return;
+        }
+        if (user.role !== Role.ADMIN) {
             res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
             return;
         }

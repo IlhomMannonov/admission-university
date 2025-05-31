@@ -35,30 +35,33 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
         return res.status(401).json({message: "Noto‘g‘ri yoki amal qilish muddati tugagan token."});
     }
 }
+export const verifyJwtToken = (roles: string[] | null = null) => {
+    return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+        const token = req.headers['authorization'];
 
-export const verifyJwtToken = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const token = req.headers['authorization'];
+        if (!token) {
+            return res.status(403).json({message: "Token taqdim etilmagan."});
+        }
+        const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-    if (!token) {
-        return res.status(403).json({message: "Token taqdim etilmagan."});
+        const decodedToken = decodeJwtToken(actualToken) as IUser | null;
+        if (!decodedToken) {
+            return res.status(403).json({message: "Token yaroqsiz"});
+        }
+
+        const user = await userRepository.findOne({where: {id: decodedToken.id, deleted: false}});
+        if (!user) return res.status(403).json({message: "User not found"});
+
+        // Agar `roles` massiv bo'lsa va foydalanuvchi roli bu massivda bo'lmasa, ruxsat berilmaydi
+        if (roles && !roles.includes(user.role)) {
+            return res.status(403).json({message: "Permission denied"});
+        }
+
+        req.user = userToIUser(user);
+
+        next();
     }
-    const actualToken = token.startsWith('Bearer ') ? token.slice(7) : token;
-
-    const decodedToken = decodeJwtToken(actualToken) as IUser | null;
-    if (!decodedToken) {
-        return res.status(403).json({message: "Token yaroqsiz"});
-    }
-
-    const user = await userRepository.findOne({where: {id: decodedToken.id, deleted: false}});
-    if (!user) return res.status(403).json({message: "User not found"});
-
-    req.user = userToIUser(user);
-
-
-    next();
-
 }
-
 export function createToken(payload: any) {
     if (!process.env.JWT_KEY) {
         throw new Error("JWT_KEY muhit o‘zgaruvchisi mavjud emas.");
