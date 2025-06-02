@@ -1,4 +1,4 @@
-    import {AuthenticatedRequest} from "../entity/interface/AuthenticatedRequest";
+import {AuthenticatedRequest} from "../entity/interface/AuthenticatedRequest";
 import {NextFunction, Response} from "express";
 import {validFields} from "../utils/CustomErrors";
 import {AppDataSource} from "../config/db";
@@ -13,9 +13,19 @@ const eduDirectionRepository = AppDataSource.getRepository(EduDirection)
 
 export const create = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code,contract_price, exam_name} = req.body;
+        const {
+            name_uz,
+            name_en,
+            name_ru,
+            edu_lang_ids,
+            year,
+            direction_code,
+            contract_price,
+            exam_name,
+            edu_form_id
+        } = req.body;
 
-        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code','contract_price','exam_name'], req.body);
+        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code', 'contract_price', 'exam_name', 'edu_form_id'], req.body);
 
         const edu_lang = await eduDirectionRepository.save({
             name_uz: name_uz,
@@ -26,6 +36,7 @@ export const create = async (req: AuthenticatedRequest, res: Response, next: Nex
             direction_code: direction_code,
             contract_price: contract_price,
             exam_name: exam_name,
+            edu_form_id: edu_form_id,
         });
         res.status(201).json({data: {edu_form: edu_lang}, success: true});
     } catch (error) {
@@ -37,26 +48,40 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
         const result = await AppDataSource
             .createQueryRunner()
             .query(`
-                SELECT
-                    ed.id,
-                    ed.name_uz,
-                    ed.name_en,
-                    ed.name_ru,
-                    ed.status,
-                    ed.edu_lang_ids,
-                    ed.year,
-                    ed.direction_code,
-                    ed.contract_price,
-                    ed.exam_name,
-                    json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs
+                SELECT ed.id,
+                       ed.name_uz,
+                       ed.name_en,
+                       ed.name_ru,
+                       ed.status,
+                       ed.edu_lang_ids,
+                       ed.year,
+                       ed.direction_code,
+                       ed.contract_price,
+                       ed.exam_name,
+                       ed.edu_form_id,
+
+                       json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs, json_build_object(
+                        'id', ef.id,
+                        'name_uz', ef.name_uz,
+                        'name_ru', ef.name_ru,
+                        'name_en', ef.name_en
+                                                                                     ) AS edu_form
+
                 FROM edu_direction ed
-                LEFT JOIN LATERAL (
+
+                         LEFT JOIN LATERAL (
                     SELECT *
                     FROM edu_lang
-                    WHERE id = ANY(ed.edu_lang_ids) AND deleted = false
-                ) el ON true
+                    WHERE id = ANY (ed.edu_lang_ids)
+                      AND deleted = false
+                        ) el ON true
+
+                         LEFT JOIN edu_form ef ON ef.id = ed.edu_form_id AND ef.deleted = false
+
                 WHERE ed.deleted = false
-                GROUP BY ed.id
+
+                GROUP BY ed.id, ef.id
+
                 ORDER BY ed.created_at DESC
             `);
 
@@ -70,7 +95,17 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
 export const update = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {id} = req.params;
-        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code, contract_price, exam_name} = req.body;
+        const {
+            name_uz,
+            name_en,
+            name_ru,
+            edu_lang_ids,
+            year,
+            direction_code,
+            contract_price,
+            exam_name,
+            edu_form_id
+        } = req.body;
 
         const eduDirection = await eduDirectionRepository.findOneBy({id: Number(id), deleted: false});
         if (!eduDirection) {
@@ -85,6 +120,7 @@ export const update = async (req: AuthenticatedRequest, res: Response, next: Nex
         if (contract_price !== undefined) eduDirection.contract_price = contract_price;
         if (exam_name !== undefined) eduDirection.exam_name = exam_name;
         if (edu_lang_ids !== undefined) eduDirection.edu_lang_ids = edu_lang_ids;
+        if (edu_form_id !== undefined) eduDirection.edu_form_id = edu_form_id;
 
 
         await eduDirectionRepository.save(eduDirection);
