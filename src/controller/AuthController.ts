@@ -363,7 +363,7 @@ export const login_admin = async (req: Request, res: Response, next: NextFunctio
             res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
             return;
         }
-        if (user.role !== Role.ADMIN) {
+        if (user.role == Role.USER) {
             res.status(401).json({message: "Foydalanuvchi yoki parol noto‘g‘ri!", success: false});
             return;
         }
