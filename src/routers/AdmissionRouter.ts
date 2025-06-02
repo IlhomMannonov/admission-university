@@ -2,7 +2,7 @@ import {Router} from "express";
 import {
     accept_step_3,
     accept_step_4,
-    all_appointment,
+    all_appointment, check_passport,
     choice_admission_type,
     create_admission,
     download_admission_request, download_contract,
@@ -26,7 +26,7 @@ router.route('/auto-personal-data')
     .post(verifyJwtToken(['user']), enter_personal_data_auto);
 
 router.route('/check-passport')
-    .post(verifyJwtToken(['user']));
+    .post(verifyJwtToken(['user','admin']),check_passport);
 
 
 router.route('/choice-type')

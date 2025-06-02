@@ -865,12 +865,13 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         edu_lang:admission.edu_lang.name_uz,
         edu_type:admission.admission_type.name,
         edu_form: admission.edu_form.name_uz,
-        contract_price:10000,
+        contract_price:admission.edu_direction.contract_price,
         fio: `${user.first_name} ${user.last_name} ${user.patron}`,
         address: user.address,
         passport_id:user.passport_id,
         phone_number:user.phone_number,
         edu_year:admission.edu_direction.year,
+        direction_code:admission.edu_direction.direction_code,
         jshir:user.jshir,
         qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission_id}`)
     };

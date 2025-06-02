@@ -37,4 +37,4 @@ const data = {
 };
 
 
-generateQaydVaraqa(data, '/qayd-varaqasi.pdf');
+// generateQaydVaraqa(data, '/qayd-varaqasi.pdf');
