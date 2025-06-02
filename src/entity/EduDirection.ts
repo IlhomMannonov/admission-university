@@ -20,4 +20,12 @@ export class EduDirection extends BaseEntityFull {
     @Column("int", {array: true, default: () => "'{}'"})
     edu_lang_ids!: number[];
 
+    @Column({type: 'int', nullable: true})
+    year!: number;
+
+    @Column({type: 'decimal', precision: 10, scale: 2, default: 0})
+    contract_price!: number
+    @Column({type: 'text', nullable: true})
+    direction_code!: string;
+
 }

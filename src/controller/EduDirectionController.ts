@@ -1,4 +1,4 @@
-import {AuthenticatedRequest} from "../entity/interface/AuthenticatedRequest";
+    import {AuthenticatedRequest} from "../entity/interface/AuthenticatedRequest";
 import {NextFunction, Response} from "express";
 import {validFields} from "../utils/CustomErrors";
 import {AppDataSource} from "../config/db";
@@ -13,15 +13,18 @@ const eduDirectionRepository = AppDataSource.getRepository(EduDirection)
 
 export const create = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const {name_uz, name_en, name_ru, edu_lang_ids} = req.body;
+        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code,contract_price} = req.body;
 
-        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids'], req.body);
+        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code','contract_price'], req.body);
 
         const edu_lang = await eduDirectionRepository.save({
             name_uz: name_uz,
             name_ru: name_ru,
             name_en: name_en,
-            edu_lang_ids: edu_lang_ids
+            edu_lang_ids: edu_lang_ids,
+            year: year,
+            direction_code: direction_code,
+            contract_price: edu_lang_ids,
         });
         res.status(201).json({data: {edu_form: edu_lang}, success: true});
     } catch (error) {
@@ -40,6 +43,9 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
                     ed.name_ru,
                     ed.status,
                     ed.edu_lang_ids,
+                    ed.year,
+                    ed.direction_code,
+                    ed.contract_price,
                     json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs
                 FROM edu_direction ed
                 LEFT JOIN LATERAL (
@@ -62,7 +68,7 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
 export const update = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {id} = req.params;
-        const {name_uz, name_en, name_ru, edu_lang_ids} = req.body;
+        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code, contract_price} = req.body;
 
         const eduDirection = await eduDirectionRepository.findOneBy({id: Number(id), deleted: false});
         if (!eduDirection) {
@@ -72,6 +78,9 @@ export const update = async (req: AuthenticatedRequest, res: Response, next: Nex
         if (name_uz !== undefined) eduDirection.name_uz = name_uz;
         if (name_en !== undefined) eduDirection.name_en = name_en;
         if (name_ru !== undefined) eduDirection.name_ru = name_ru;
+        if (year !== undefined) eduDirection.year = year;
+        if (direction_code !== undefined) eduDirection.direction_code = direction_code;
+        if (contract_price !== undefined) eduDirection.contract_price = contract_price;
         if (edu_lang_ids !== undefined) eduDirection.edu_lang_ids = edu_lang_ids;
 
 

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>Abituriyent Qayd Varaqasi</title>
+    <style>
+        .container {
+            width: 794px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 70px;
+            box-sizing: border-box; /* Paddingni hisobga olish */
+        }
+
+        .head {
+            margin-bottom: 2rem;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .head-subs {
+            max-width: 400px;
+            display: block;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 16px;
+        }
+
+        .underline {
+            display: inline-block;
+            width: 200px;
+            border-bottom: 1px solid #666;
+            margin: 0 4px;
+        }
+
+        .between {
+            display: flex;
+            justify-content: space-between; /* Elementlar orasidagi bo'shliqni kengaytirish */
+            width: 100%; /* Butun kenglikni egallash */
+        }
+
+        .info {
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #000;
+        }
+
+        .info-item {
+            display: flex;
+            margin-bottom: 6px;
+        }
+
+        .info-item span {
+            width: 50%;
+        }
+
+        .info-item .value {
+            width: 50%;
+            font-weight: 600;
+        }
+
+        .bold-text {
+            font-weight: bold;
+        }
+        .italic {
+            font-style: italic;
+        }
+
+        .sec-mb .item {
+            margin-bottom: 1rem;
+        }
+
+        .contract-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+        }
+
+        .contract-table th {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .input-line {
+            border-bottom: 1px solid black;
+            width: 100%;
+            height: 20px;
+            margin-bottom: 4px;
+        }
+
+        .label-center {
+            text-align: center;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .input-underline {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            width: 250px;
+            height: 16px;
+        }
+
+        .input-short {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            width: 40px;
+            height: 16px;
+        }
+
+        .rekvizit-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: "Times New Roman", serif;
+            font-size: 14px;
+        }
+
+        .input-line {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            width: 200px;
+            height: 16px;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="head section">
+        <strong class="head-subs">OLIY TA’LIM XIZMATLARINI KO‘RSATISH TO‘G‘RISIDA</strong>
+        <div class="section-title">SHARTNOMA № <%= contract_id || 'yoq' %></div>
+        <div class="between">
+            <span>Navoiy viloyat</span>
+            <span><%= date || 'yoq' %></span>
+        </div>
+        <p class="desc">
+            “Sharq university” NTM (keyingi o‘rinlarda - Ta’lim muassasasi OTM) nomidan Ustavga asosan ish yurituvchi
+            rektor ATAMURADOV SHERZOD AKRAMOVICH bir tomondan, va <%= fio || 'yoq' %> (keying o‘rinlarda -
+            Talaba), birgalikda - Tomonlar, talabani bakalavriat 1-kurs davomida o‘qitish maqsadida mazkur shartnomani
+            (keyingi o‘rinlarda-Shartnoma) quyidagi shartlar asosida tuzdilar:
+        </p>
+    </div>
+
+    <div class="sec2 section">
+        <div class="section-title">USHBU SHARTNOMADA QO‘LLANILADIGAN TERMINLAR</div>
+        <p class="desc">
+            <span class="bold-text"> *OTM </span>- Oliy ta’lim muassasi (universitet).<br><br>
+            <span class="bold-text">*Mustaqil</span> ta’lim - o‘quv va ilmiy adabiyotlardan foydalanish asosida modul
+            mavzularini chuqurroq o‘rganish;
+            -tarqatma materiallar bo‘yicha ma’ruzalar qismini o‘zlashtirish; -maxsus adabiyotlar bo‘yicha modul
+            bo‘limlari yoki mavzulari ustida ishlash; -amaliy mashg‘ulotlarda berilgan topshiriqlarni bajarish.<br><br>
+            <span class="bold-text">*O‘quv davri</span> - ta’lim jarayoni boshidan oxirigacha o‘tgan va o‘qish
+            semestrlarini o‘z ichiga olgan, ta’lim
+            jarayoni davomiyligi davridir. Ta’lim davri o‘qish yilining boshidan boshlanadi va ushbu o‘qish yilidagi
+            oxirgi darslar kuniga qadar davom etadi. Ta’lim davriga ta’til va imtihon sinovlari davri kirmaydi.<br><br>
+            <span class="bold-text">*Semestr</span> - o‘quv yilining eng uzun qismidir. Bu davrda talabalar
+            universitetda ma’ruza va seminarlarda
+            qatnashishlari, shuningdek, uy vazifalarini bajarishlari shart.<br><br>
+            <span class="bold-text">*To‘lov kuni</span> - bu universitetning bank hisobvarag‘iga ma’lum miqdordagi pul
+            birliklarini kelib tushishi
+            kerak bo‘lgan sana.<br><br>
+            <span class="bold-text">*Ta’lim olish uchun to‘lov</span> – 2025-2026 o‘quv yili uchun shartnomasining
+            umumiy to‘lov summasi.<br><br>
+            <span class="bold-text"> *100% to‘lov</span> - universitetning bank hisob raqamiga ushbu shartnomaning 3.1-
+            bandda ko‘rsatilgan miqdorni
+            to‘lashdir.<br><br>
+        </p>
+
+        <div class="sec2 section">
+            <div class="section-title">1. SHARTNOMA PREDMETI</div>
+            <div>
+                <strong>1.1. Mazkur shartnomaga asosan OTM 2025-2026-o‘quv yili davomida belgilangan davlat ta’lim standartlari va o‘quv dasturlariga muvofiq o‘qitish, Buyurtmachi esa shartnomaning 3-bobida ko‘rsatilgan tartib va qiymatidagi to‘lovni amalga oshirish hamda talaba OTMda belgilangan tartibga muvofiq ta’lim olish majburiyatini oladi:</strong> <br>
+                <br>
+                <div class="italic">
+                    <div><b>Ta’lim bosqichi:</b> <span><%= edu_form || 'yoq' %></span></div>
+                    <div><b>Ta’lim shakli:</b> <span>T<%= edu_type || 'yoq' %></span></div>
+                    <div><b>Muddati:</b> <span><%= edu_year || 'yoq' %></span></div>
+                    <div><b>Ta’lim yo‘nalishi:</b> <span ><%= edu_direction || 'yoq' %></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sec3 section">
+            <div class="section-title">2. TOMONLARNING HUQUQ VA MAJBURIYATLARI</div>
+            <div>
+
+                <strong>2.1. OTMning huquqlari:</strong> <br>
+                <br>
+                <div>
+                    <span class="bold-text">2.1.1.</span> Talabadan/Buyurtmachidan ushbu shartnoma majburiyatlarini
+                    belgilangan tartibda bajarilishini,
+                    shu jumladan talaba OTMning ichki hujjatlarida belgilangan qoidalarga rioya qilishini, o‘quv
+                    mashg‘ulotlariga muntazam qatnashishini, Buyurtmachi shartnoma bo‘yicha to‘lovlarni o‘z vaqtida
+                    amalga oshirishni talab qilish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.1.2.</span> Talaba OTMning ichki hujjatlarida belgilangan qoidalarga rioya
+                    qilmagan, bir semestr davomida
+                    darslarni uzrli sabablarsiz 74 soatdan ortiq qoldirgan yoki Buyurtmachi o‘qitish uchun belgilangan
+                    miqdordagi to‘lovni o‘z vaqtida amalga oshirmagan bo‘lsa, OTM Talabaga nisbatan belgilangan tartibda
+                    talabalar safidan chetlashtirish, kursdan kursga qoldirish yoki boshqa qonuniy choralarni qo‘llash;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.1.3.</span> Istisno tariqasida shartnoma bo‘yicha to‘lov muddatlarini
+                    uzaytirish (OTM rektorining
+                    buyrug‘i bilan);
+                </div>
+                <br>
+
+                <div>
+                    <span class="bold-text">2.1.4.</span> Buyurtmachi shartnomaning 3- bobida ko‘rsatilgan tartib va
+                    miqdorda o’z vaqtida to‘lovni
+                    amalga oshirmaganida, talabani barcha darslarga, imtihon (oraliq va yakuniy) jarayonlariga
+                    qo‘ymaslik;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.1.5.</span> Talabaga nisbatan Kredit-modul tizimi to‘g‘risidagi Nizomga
+                    asosan tegishli choralar ko‘rish
+                    huquqiga ega.
+                </div>
+
+            </div>
+            <br>
+            <div>
+                <strong>2.2. OTMning majburiyatlari:</strong>
+                <br>
+                <br>
+                <div>
+                    <span class="bold-text">2.2.1.</span> TO‘qitish uchun O‘zbekiston Respublikasining “Ta’lim
+                    to‘g‘risida”gi Qonuniga muvofiq OTM
+                    Ustavi va boshqa ichki hujjatlarida nazarda tutilgan zarur shart-sharoitlarni yaratish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.2.2.</span> Talabalarning qonun hujjatlarida belgilangan huquqlarining
+                    bajarilishini ta’minlash;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.2.3.</span> Talabani tasdiqlangan o‘quv reja va dasturlarga muvofiq
+                    darajada o‘qitish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.2.4.</span> Talaba bakalavriat yo‘nalishini muvaffaqiyatli tamomlaganda,
+                    belgilangan tartibda O‘zbekiston
+                    Respublikasi davlat va nodavlat tashkilotlarida tan olinadigan namunadagi diplom berish;
+                </div>
+            </div>
+            <br>
+            <div>
+                <br>
+                <strong>2.3. Talaba va Buyurtmachining huquqlari:</strong>
+                <br>
+                <br>
+                <div>
+                    <span class="bold-text">2.3.1.</span> OTMdan ushbu shartnoma majburiyatlari bajarilishini talab
+                    qilish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.3.2.</span> . OTMda tasdiqlangan o‘quv reja va dasturlarga muvofiq
+                    darajada ta’lim olish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.3.3.</span> OTMning ta’lim jarayonlarini yaxshilashga doir takliflar
+                    berish;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.3.4.</span> O‘qish uchun to‘lov turini mazkur shartnomaning 3-bobiga
+                    asosan tanlash;
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.3.5.</span> OTM imkon berganda (agar tanlangan filialda belgilangan
+                    yo‘nalish, ta’lim shakli, ta’lim tilida bo‘sh o‘rin bo‘lsa) OTMning boshqa filialiga o‘qishni
+                    ko‘chirish huquqiga ega;
+                </div>
+            </div>
+
+            <div>
+                <br>
+                <strong>2.4. Talaba va Buyurtmachining majburiyatlari:</strong>
+                <br>
+                <br>
+                <div>
+                    <span class="bold-text">2.4.1.</span> Buyurtmachi joriy o‘quv yili uchun belgilangan o‘qitish
+                    qiymatini shartnomaning 3-bobida ko‘rsatilgan tartib va miqdorda o‘z vaqtida to‘lash.
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.4.2.</span> OTM Ustavi va boshqa ichki hujjatlari talablariga qat’iy
+                    rioya qilish
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text"> 2.4.3.</span> Talabaning o‘quv mashg‘ulotlarida muntazam qatnashishi.
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.4.4.</span> Talaba OTMda belgilangan tartib va doirada ta’lim olish hamda
+                    ushbu jarayonda bilim darajasini oshirib borish. Qoldirilgan darslar OTM tomonidan qoplab berilmaydi
+                    va ushbu darslar uchun qayta hisob-kitob qilinmaydi.
+                </div>
+                <br>
+                <div>
+                    <span class="bold-text">2.4.5.</span> Shartnomani imzolaganidan keyin uning tasdiqlangan bir
+                    nusxasini va boshqa talab qilingan hujjatlarni OTMga taqdim etish. Hujjatlar (ushbu shartnomaning
+                    imzolangan nusxasi, diplom, attestat va/yoki shahodatnoma asli, belgilangan fotosurat, shaxsni
+                    tasdiqlovchi hujjat nusxasi) va/yoki ularning nusxalarini OTM tomonidan belgilangan muddatda qisman
+                    va/yoki to‘liq taqdim etilmasligi talabalikka qabul qilmaslikka asos bo‘ladi.
+                </div>
+            </div>
+        </div>
+
+        <div class="sec4 sec-mb section">
+            <div class="section-title">3. TO‘LOV MIQDORLARI VA MUDDATLARI</div>
+            <div class="item">
+                <b>3.1</b>	2025-2026-o‘quv yilida ta’lim olish uchun to‘lov qiymati QQSsiz <span class="underline" style="width: 150px"></span>
+                <br>
+                (<span class="underline"></span>) so‘mni tashkil etadi.
+            </div>
+            <div class="item">
+                <b>3.1</b>	Talaba yoki jismoniy shaxs to‘lovlarni amalga oshirishi uchun har bir o‘quv yilida alohida shartnoma rasmiylashtiriladi va keyingi o‘quv yillarida kontrakt miqdori o‘zgarishi mumkin.
+            </div>
+            <div class="item">
+                <b>3.3</b> To‘lov-shartnoma asosida o‘qish istagini bildirgan abituriyentlarga birinchi 25 % (yegirma besh foiz) miqdorini (talabalikka qabul qilinish uchun) 2025-yilning 1-noyabr sanasiga qadar, yuqori kurs talabalari ham 2025-yilning 1-oktyabr sanasiga qadar, qolgan to‘lovni uchga bo‘lib to‘langanda, to‘lovni keyingi 25 % (yegirma besh foiz) ini 2025-yilning 31-dekabr sanasiga qadar, keyingi 25 % (yegirma besh foiz) ini    2025-yilning 30-mart sanasiga qadar va 2025-2026-o‘quv yilidagi to‘lovning oxirgi to‘lovini       2025-yil 1-iyun sanasigacha yoki Ta’lim muassasasi komissiyasi tomonidan belgilangan muddatgacha to‘lanadi.
+            </div>
+            <div class="item">
+               <b> 3.4</b>	To‘lov faqat bank pul o‘tkazmalari orqali amalga oshriladi. Bank o‘tkazmasining komissiya miqdori ta’lim olish uchun to‘lov qiymatiga kirmaydi va Buyurtmachi tomonidan qoplanadi. O‘zaro hisob-kitoblar hisob-faktura orqali amalga oshiriladi.
+            </div>
+            <div class="item">
+                <b>3.5</b>	Shartnoma qiymati universitetning bank hisobvarag‘iga mablag‘ kelib tushgan kunidan to‘langan deb e’tirof etiladi.
+            </div>
+            <div class="item">
+                <b>3.6</b>	Buyurtmachi tomonidan shartnoma bo‘yicha ta’lim olish uchun to‘lov qiymatini to‘lashda to‘lov topshiriqnomasida talabaning  familiyasi,  ismi, otasining ismi, o‘qiyotgan kursi va yo‘nalishi to‘liq ko‘rsatilishi kerak. Aks holda to‘lov amalga oshirilmagan deb hisoblanishi mumkin.
+            </div>
+            <div class="item">
+                <b>3.7</b>	Talaba akademik fanlarni talab darajasida o‘zlashtirmaganda, kursdan-kursga qoldirish nazarda tutiladi, bunday holda kontrakt to‘lovi talaba tomonidan har bir o‘qigan davriga mos ravishda to‘lanadi.
+            </div>
+            <div class="item">
+                <b>3.8</b>	Talabaga akademik ta’til berilgan taqdirda Buyurtmachi tomonidan to‘langan to‘lov mablag‘lari OTM bank hisobida keyingi o‘quv yiliga saqlanib (muzlatilib) qolinadi.
+            </div>
+        </div>
+
+        <div class="sec5 sec-mb section">
+            <div class="section-title">4. SHARTNOMANI BEKOR QILISH</div>
+            <div class="item">
+                <b>4.1</b> Shartnoma quyidagi hollarda OTM tomonidan bir tomonlama bekor qilinadi:
+            </div>
+            <div class="item">
+                <b>4.1.1.</b> Ustav va boshqa ichki hujjatlariga muvofiq talaba talabalar safidan chiqarilganda;
+            </div>
+            <div class="item">
+                <b>4.1.2.</b> Shartnoma to‘lov miqdori belgilangan muddat ichida to‘lanmasa;
+            </div>
+            <div class="item">
+                <b>4.1.3.</b> Shartnomaning 2.1.2, 2.1.3.-bandlarida ko‘rsatilgan hollarda;
+            </div>
+            <div class="item">
+                <b>4.1.4.</b> Talaba imtihonlarda ayyorlik, tovlamachilik, firibgarlik, pora berish orqali va boshqa shunga o‘xshash belgilangan tartibga zid yo‘llar bilan o‘qishga qabul qilinganligi aniqlanganida;
+            </div>
+            <div class="item">
+                <b>4.1.5.</b> Talaba o‘qish davri davomida korrupsiya yoki korrupsiya holatlari bilan bog‘liq huquqbuzarlikni amalga oshirganida yoki urunganida (o‘qituvchi- pedagog, xodimlarga pul, qimmatbaho sovg‘a va boshqalar taklif qilish, berish yoki bunda vositachilik qilish);
+            </div>
+            <div class="item">
+                <b>4.1.6.</b> Talaba/Buyurtmachi ОТМning qonuniy talablarini bajarmaganida.
+            </div>
+            <div class="item">
+                <b>4.1.7.</b> Shaxsiy hujjatlarning asl nusxasini o‘z vaqtida topshirmaslik yoki taqdim etilgan xujjatlar haqiqiy emasligi aniqlanganda, Universitet shartnomani bir tomonlama bekor qilish huququga ega bo‘lib, talabani talabalar chetlatishga asos bo‘ladi;
+            </div>
+            <div class="item">
+                <b>4.1.8.</b> Universitet tomonidan o‘qishini boshqa OTMdan ko‘chirib kelayotgan talabaning shaxsiy yig‘ma jildi va uning haqiqatda o‘qiganligini tasdiqlovchi ma’lumotnomani jo‘natish uchun Universitet tomonidan yozilgan so‘rovnomaga javob xati belgilangan muddatda kelmaganda yoki so‘rovnomaga rad javobi berilganda;
+            </div>
+            <div class="item">
+                <b>4.2.</b> Talaba darslarga qatnashgan yoki qatnashmaganligidan qat’iy nazar shartnoma OTM tomonidan bir tomonlama bekor qilingan barcha holatlarda Buyurtmachi Talaba amalga oshirgan to‘lov qaytarilmaydi. Agar Buyurtmachi Talaba ungacha bo‘lgan muddatda ushbu shartnomada belgilangan (1-semestr to‘lovi miqdorida; agar shartnoma 2-semestr davrida bekor qilinsa - 1-yillik to‘lov miqdorida) to‘lovni amalga oshirmagan bo‘lgan taqdirda Buyurtmachi Talaba ushbu qarzdorlikni to‘lashni o‘z mujburiyatiga oladi;
+            </div>
+            <div class="item">
+                <b>4.3.</b> Agar shartnoma OTM tashabbusi bilan bir tomonlama bekor qilinsa va talaba talabalar safidan chiqarib yuborilsa, OTM yozma yoki elektron shaklda xabar yuborish orqali buyurtmachini xabardor qilishi mumkin.
+            </div>
+            <div class="item">
+                <b>4.4.</b> Shartnoma taraflar ixtiyoriga bog‘liq bo‘lmagan holatlarga ko‘ra bekor qilinishi mumkin:
+            </div>
+            <div class="item">
+                <b>4.4.1.</b> Talaba vafot etsa.
+            </div>
+            <div class="item">
+                <b>4.4.2.</b> Talaba tomonidan tanlangan ta’lim shakli, yo‘nalishi, tili bo‘yicha qabul rejasida ko‘rsatilgan miqdorda guruh shakllanmagan bo‘lsa.
+            </div>
+            <div class="item">
+                -Ushbu holatlarda OTM Talabaga\Buyurtmachiga agar imkoni bo‘lsa OTMning boshqa filialida yoki boshqa ta’lim shaklida, tilida, yo‘nalishida o‘qishni davom ettirishini taklif qiladi. Talaba\Buyrtmachi ushbu taklifga javob xati bilan murojat qilishi shart bo‘ladi, aks holda ushbu shartnoma bekor qilingan hisoblanadi va Talaba talabalar safidan chetlashtiriladi.
+            </div>
+            <div class="item">
+                <b>4.4.3.</b> Shartnoma taraflar ixtiyoriga bog‘liq bo‘lmagan holatlarga ko‘ra bekor qilinganda OTM tomonidan Buyurtmachiga qoldiq summaning qaytarilishi bilan bog‘liq sarf-xarajatlar (bank komissiyalari, kanselyariya xarajatlari va boshqalar) va ko‘rsatilgan xizmatlar uchun (xizmatlar ko‘rsatilganda) summani ushbu qoldiq summadan chegirilib qolingan holda 10 bank ish kunida Buyurtmachining yozma arizasiga asosan qaytariladi.
+            </div>
+            <div class="item">
+                <b>4.5.</b> OTMning boshqa bino/joyga ko‘chishi (bir shahar hududida), masofaviy ta’lim shakliga o‘tishi taraflar ixtiyoriga bog‘liq bo‘lmagan holat hisoblanmaydi va Talaba OTMning talabiga ko‘ra boshqa bino/joyda yoki masofaviy ta’lim shaklida o‘qishni davom ettirishi kerak bo‘ladi. Bu holatda Talaba ushbu shartlarga rozi bo‘lmasa va o‘qishini davom ettirmasa OTM shartnomaning 4.1.6. bandiga muvofiq sharnomani bir tomonlama bekor qiladi va amalga oshirilgan to‘lovni qaytarmaydi, agar Buyurtmachi ungacha muddatda ushbu shartnomada belgilangan (1 semestr to‘lovi miqdorida; agar shartnoma 2-semestr davrida bekor qilinsa – 1 yillik to‘lov miqdorida) to‘lovni amalga oshirmagan bo‘lsa, Buyurtmachi ushbu qarzdorlikni to‘lashni o‘z mujburiyati sifatida tan oladi.
+            </div>
+        </div>
+
+        <div class="sec6 sec-mb section">
+            <div class="section-title">5. FORS-MAJOR HOLATLAR</div>
+            <div class="item">
+                <b>5.1.</b> Ushbu shartnomaga asosan majburiyatlarning bajarilmasligi holatlari yengib bo‘lmaydigan kuchlar (fors-major) ta’siri natijasida vujudga kelganda, Tomonlar o‘z majburiyatlarini bajarmaslikdan qisman yoki to‘liq ozod bo‘ladilar, AGAR fors-major hukumat tomonidan rasman e’lon qilinsa, masofaviy ta’lim shaklida o‘qishning imkoni bo‘lmasa va ular 3 oydan uzoq davom etsa.
+            </div>
+            <div class="item">
+                <b>5.2.</b> Yengib bo‘lmaydigan kuchlar (fors-major) holatlariga Tomonlarning irodasi va faoliyatiga bog‘liq bo‘lmagan kutilmagan va yengib bo‘lmagan tabiat hodisalari (zilzila, ko‘chki, bo‘ron, qurg‘oqchilik va boshqalar, agar ular 3 oydan uzoq davom etsa) yoki ijtimoiy-iqtisodiy holatlar (urush holati, qamal, davlat manfaatlarini ko‘zlab, agar ular 3 oydan uzoq davom etsa) sababli yuzaga kelgan sharoitlarda Tomonlarga qabul qilingan majburiyatlarni bajarish imkonini bermaydigan favqulodda, oldini olib bo‘lmaydigan va kutilmagan holatlar kiradi.
+            </div>
+            <div class="item">
+                <b>5.3.</b> Shartnoma Tomonlaridan qaysi biri uchun majburiyatlarni yengib bo‘lmaydigan kuchlar (fors-major) holatlari sababli bajarmaslik ma’lum bo‘lsa, darhol ikkinchi tomonga bu haqida 10 kalendar kun ichida ushbu holatlar harakati sababini dalillar bilan taqdim etishi lozim. Ushbu holatda OTM masofaviy shaklda ta’lim berishni yo‘lga qo‘yish huquqiga ega va Buyurtmachi/Talaba bu shaklda ta’lim olishga roziligini bildiradi. Ushbu holatlarda OTM 10 ish kuni ichida Buyurtmachi/Talabaga masofaviy shaklda o‘qishni davom ettirishni taklif qiladi. Buyurtmachi/Talaba ushbu taklifga 10 ish kuni ichida yozma murojat bilan javob taqdim qilishi shart bo‘ladi, aks holda ushbu shartnoma OTM tomonidan shartnomaning 4.1.6.-bandiga ko‘ra bekor qilinishi mumkin va Talaba talabalar safidan chiqariladi va to‘lov qaytarilmaydi. Agar Talaba\Buyurtmachi masofaviy ta’lim shaklida o‘qishni davom ettirishga norozi bo‘lsa, ushbu shartnoma bekor qilinadi va amalga oshirilgan to‘lov qaytarilmaydi. Agar Buyurtmachi ungacha muddatda ushbu shartnomada belgilangan (1-semestr to‘lovi miqdorida; agar shartnoma 2-semestr davrida bekor qilinsa – 1 yillik to‘lov miqdorida) to‘lovni amalga oshirmagan bo‘lsa Buyurtmachi ushbu qarzdorlikni to‘lashni o‘z zimmasiga oladi yoki Talaba yozma murojatiga binoan o‘qishni keyingi yilga shu davridan qaytadan o‘qish sharti bilan davom ettirishi mumkin bo‘ladi (an’anaviy ta’limga o‘tish imkoni bo‘lsa).
+            </div>
+            <div class="item">
+                <b>5.4.</b> Yengib bo‘lmaydigan kuchlar (fors-major) davrida masofaviy shaklda ta’lim jarayonini yo‘lga qo‘yish imkoni bo‘lmasa, hukumat tomonidan rasman e’lon qilingan bo‘lsa va yengib bo‘lmaydigan kuchlar (fors-major) ta’siri 3 (uch) oydan ortiqroq davom etsa shartnomaga asosan majburiyatlarni ijro qilish muddati ushbu yengib bo‘lmaydigan kuchlar (fors-major) davom etish muddatiga qadar uzaytiriladi. Fors-major davridan uch oydan keyin shartnoma bir tomonlama bekor qilinishi mumkin. Bu holatda Buyurtmachi yozma arizasiga asosan xizmat davriga (o‘qish kalendar rejasiga asoslangan holda har bir dars soati – kunduzgi, kechki va masofaviy ta’lim shakli uchun; har bir oy – sirtqi ta’lim shakli uchun) mutanosib ravishda to‘lov summasidan chegirilib qoldiq to‘lov summasi Buyurtmachiga 30 kalendar kun ichida qaytarib beriladi.
+            </div>
+            <div class="item">
+                <b>5.5.</b> Ushbu shartnomaning 5.3. bandida ko‘rsatilgan shartga asosan fors-major holatlari ta’limni masofaviy amalga oshirishga imkon bersa, tomonlar o‘z majburiyatlarini masofaviy ta’limga asosan amalga oshiradilar. Bunda Talaba masofaviy ta’lim olish uchun talab qilingan barcha texnik va boshqa jihatdan sharoitni yaratishni o‘z zimmasiga oladi.
+            </div>
+        </div>
+
+        <div class="sec7 sec-mb section">
+            <div class="section-title">6. YAKUNIY QOIDALAR</div>
+            <div class="item">
+                <b>6.1.</b> Shartnoma bevosita tomonlar shartnomani ONE ID tizimidan ro‘yxatdan o‘tib elektron shaklda yuklab olgan/Elektron raqamli imzo qo‘yilgan paytdan yoki ushbu shartnomaga asosan ta’lim uchun to‘lovni amalga oshirgan paytdan e’tiboran kuchga kiradi. Mazkur shartnoma tuzilgan paytdan boshlab mazkur shartnoma mavzusi bo‘lgan masalalar bo‘yicha barcha oldingi yozishmalar, hujjatlar va tomonlarning (shu jumladan OTM xodimlari bilan bo‘lgan) o‘rtasidagi muzokaralar o‘z kuchini yo‘qotadi.
+            </div>
+            <div class="item">
+                <b>6.2.</b> Talabaning akademik qarzdorligi bo‘lgan taqdirda, qayta o‘qitiladigan fanlar va kreditlarning sonidan kelib chiqqan holda, shartnoma to’lovining tegishli qismi talaba tomonidan o‘rnatilgan tartibda OTMga to‘lanadi.
+            </div>
+            <div class="item">
+                <b>6.3.</b> Tomonlar o‘rtasida vujudga keladigan nizolar o‘zaro muzokaralar olib borish hamda talabnoma yuborish orqali hal etiladi, shartnomaning 4 va 5 boblarida ko‘rsatilgan holatlar bundan mustasno.
+            </div>
+            <div class="item">
+                <b>6.4.</b> Shartnoma bo‘yicha o‘z majburiyatlarini bajarmagan tomon ushbu shartnoma va qonunda belgilangan javobgarlikka tortiladi.
+            </div>
+            <div class="item">
+                <b>6.6.</b> Barcha o‘zaro xabar va ogohlantirishlar, arizalar va boshqa yozishmalar tomonlar tarafidan yozma yoki elektron ravishda taqdim etiladi. Xabar va ogohlantirishlar, arizalar va boshqa yozishmalar pochta orqali, buyurtma xat, elektron xat orqali yoki tomonlarning yuridik manziliga (oluvchining qabul qilib olganligini tasdiqlovchi imzosi bilan) qo‘ldan qo‘lga yetkazish yo‘li bilan yuborilganidagina rasman yetkazilgan hisoblanadi. OTM “Sharq University” rasmiy telegram kanali orqali talaba va tuyurtmachini xabardor qilish va ogohlantirish huquqini o‘zida saqlab qoladi. tuyurtmachi va talaba ushbu “Sharq University” telegramdagi rasmiy kanaliga obuna bo‘lish va kuzatib borish majburiyatini oladi.
+            </div>
+            <div class="item">
+                <b>6.7.</b> Ushbu shartnomaning amal qilish muddati – bir o‘quv yili hisoblanadi. Majburiyatlar bajarilmagan hollarda ushbu muddat tomonlar o‘z majburiyatlarini to‘liq bajarmagunga qadar uzaytirilishi nazarda tutilgan.
+            </div>
+            <div class="item">
+                <b>6.8.</b> Buyurtmachi/Talaba tomonidan taqdim qilingan barcha hujjatlar, hujjatlardagi ma’lumotlarning ishonchliligi, to‘g‘riligi, haqqoniyligi bo‘yicha javobgarlik Buyurtmachi/Talaba zimmasiga yuklanadi. Talaba/Buyurtmachi tomonidan hujjatlarni qalbakilashtirish huquqbuzarligi OTM tomonidan aniqlanganda darhol huquqni muhofaza qiluvchi organlarga xabar beriladi, Talaba talabalar safidan chetlashtiriladi. Bunday holatlar uchun jinoiy javobgarlik mavjudligini OTM ma’lum qiladi (Jinoyat kodeksining 228 moddasi). Agar bunday holat talaba OTMdan bakalavr diplomini u taqdim qilgan qalbaki hujjat(-lar) yoki hujjatlardagi qalbakilashtirilgan ma’lumotlar asosida olgan bo‘lsa, unda diplom haqiqiy emas deb topiladi va ushbu holat yuzasidan huquqni muhofaza qiluvchi organlarga xabar beriladi.
+            </div>
+            <div class="item">
+                <b>6.9.</b> OTM talabaning shaxsiy va boshqa mulkiga javobgar emas, talaba o‘ziga tegishli bo‘lgan mulkni OTM hududida yo‘qotib qo‘ysa, mulkiga zarar yetsa va boshqa shunga o‘xshash holatlar sodir bo‘lsa OTM javobgar hisoblanmaydi.
+            </div>
+        </div>
+
+        <div class="sec7 sec-mb section">
+            <div class="section-title">7. TOMONLARNING JAVOBGARLIGI</div>
+            <div class="item">
+                <b>7.1.</b> Tomonlarning biri ushbu shartnoma majburiyatlarini bajarmagan yoki lozim darajada bajarmagan taqdirda boshqa tarafga yetkazilgan zararni ushbu shartnomada va amaldagi qonunchilikda belgilangan tartibda qoplab beradi.
+            </div>
+            <div class="item">
+                <b>7.2.</b> Tomonlarning javobgarligi ushbu shartnoma, OTM Ustavi, ichki tartib qoidalari, OTM rahbariyatining buyruqlari hamda amaldagi qonunchilik asosida belgilanadi.
+            </div>
+            <div class="item">
+                <b>7.3.</b> Buyurtmachi/Talaba tomonidan mazkur shartnoma shartlari tegishli darajada bajarilmasligi natijasida yuzaga kelgan zararlarni OTMga qoplab berishi shart.
+            </div>
+            <div class="item">
+                <b>7.4.</b> Tomonlar o‘rtasidagi barcha nizolar muzokaralar yo‘li bilan hal qilinadi. Agar o‘zaro rozilikka erishilmasa, nizolar O‘zbekiston Respublikasi qonunchiligiga va tomonlar kelishuviga asosan Navoiy shahar sudida ko‘riladi.
+            </div>
+            <div class="item">
+                <b>7.5.</b> Davlat, xususiy va boshqa oliy ta’lim muassasalarida belgilangan chegirmalar, imtiyozlar “Sharq University” OTMga tatbiq etilmaydi, bunday holatlar OTM ichki hujjatlari bilan belgilanadi.
+            </div>
+            <div class="item">
+                <b>7.6.</b> “Ta’lim muassasa” axborotlar va xabarnomalarni internetdagi veb-saytida, axborot tizimida yoki e’lonlar taxtasida e’lon joylashtirish orqali xabar berishi mumkin.
+            </div>
+            <div class="item">
+                <b>7.7.</b> Shartnoma 3 (uch) nusxada, tomonlarning har biri uchun bir nusxadan tuziladi va uchala nusxa ham bir xil huquqiy kuchga ega.
+            </div>
+            <div class="item">
+                <b>7.8.</b> Ushbu shartnomaga qo‘shimcha bitim kiritilgan taqdirda ushbu barcha kiritilgan qo‘shimcha bitimlar shartnomaning ajralmas qismi hisoblanadi.
+            </div>
+        </div>
+
+        <div class="sec8 section">
+            <div class="section-title">YURIST XULOSASI</div>
+            <p style="margin-bottom: 2rem">Ushbu shartnoma O‘zbekiston Respublikasining amaldagi qonunchiligiga muvofiq Fuqarolik kodeksining kelishuvlar to‘g‘risidagi qoidalardan kelib chiqqan holda tuzilgan. </p>
+            <div>
+                Yuriskonsult <span class="underline" style="width: 100px"></span> <span class="underline"></span>
+            </div>
+        </div>
+        <div class="sec9 section">
+            <div class="section-title">MUHIM:</div>
+            <p>Eslatma: Shartnoma to‘lovini amalga oshirayotganingizda shartnoma raqamini, sanasini va talaba FIO, kursi va yo‘nalishini to‘liq ko‘rsatishingiz shart. Aks holda OTM amalga oshirilgan to‘lovingizni qabul qilmaslikka haqli.</p>
+        </div>
+
+        <div class="sec10 section">
+            <div class="section-title">8.	TOMONLARNING REKVIZITLARI VA IMZOLARI</div>
+            <div class="imzo">
+                <table class="contract-table" border="1" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <th>Ta’lim muassasasi</th>
+                        <th>Ta’lim oluvchi</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Sharq Universiteti</strong><br><br>
+
+                            <strong>Pochta manzili:</strong> Navoiy shahri, Navoiy ko‘chasi, 32 b-uy.<br><br>
+
+                            <strong>E-mail:</strong> info@sharqedu.uz<br><br>
+
+                            <strong>Tel.:</strong> +99 879 222 07 00
+                        </td>
+                        <td>
+                            <div><%= fio || 'yoq' %></div>
+                            <div class="label-center">(F.I.Sh.)</div>
+
+                            <div><strong>Manzil:</strong> <span ><%= address || '' %></span></div><br>
+
+                            <div><strong>Pasport seriyasi va raqami:</strong> <span><%= passport_id || 'yoq' %></span></div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="last" style="margin-top: 2rem">
+                <table class="rekvizit-table" border="1" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <td>
+                            <strong>Faks:</strong><br><br>
+                            <strong>Bank rekvizitlari:</strong><br>
+                            <strong>H/r:</strong> 20208000507052219001<br>
+                            <strong>INN:</strong> 311206639<br>
+                            <strong>MFO:</strong> 00440<br><br>
+                            <strong>Rahbar:</strong> Atamurodov Sherzod Akramovich
+                        </td>
+                        <td>
+                            <div><strong>STIR:</strong> <span class="input-line"></span></div><br>
+                            <div><strong>Tel.:</strong> <span class="input-line"></span></div><br>
+                            <div><strong>Telegram:</strong> <span class="input-line"></span></div><br>
+                            <div><strong>E-mail:</strong> <span class="input-line"></span></div><br>
+                            <div><strong>Imzo:</strong> <span class="input-line"></span></div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+</body>
+</html>

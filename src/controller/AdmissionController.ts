@@ -22,7 +22,8 @@ import fs from 'fs/promises';
 import {create_contact, create_deal, update_lead_status} from "../Service/AmoCRMServise";
 import {Not} from "typeorm";
 import amo_config from '../../amo_crm_config.json';
-import { promises as fsPromises } from "fs";
+import {promises as fsPromises} from "fs";
+
 const userRepository = AppDataSource.getRepository(User)
 const admissionTypeRepository = AppDataSource.getRepository(AdmissionType)
 const admissionRepository = AppDataSource.getRepository(Admission)
@@ -665,14 +666,14 @@ export const download_admission_request = async (
         const user_id = req.params.id;
 
         const user = await userRepository.findOne({
-            where: { id: Number(user_id), deleted: false, state: "passed" },
+            where: {id: Number(user_id), deleted: false, state: "passed"},
         });
 
         if (!user) throw RestException.notFound("User not found");
 
         const admission = await admissionRepository.findOne({
-            where: { user_id: Number(user_id), deleted: false },
-            order: { id: "desc" },
+            where: {user_id: Number(user_id), deleted: false},
+            order: {id: "desc"},
             relations: ["edu_form", "edu_lang", "edu_direction", "admission_type"],
         });
 
@@ -723,18 +724,18 @@ export const download_admission_request = async (
             eduType: admission.admission_type.name,
         };
 
-        const html = await ejs.renderFile(templatePath, data, { async: true });
+        const html = await ejs.renderFile(templatePath, data, {async: true});
         const browser = await puppeteer.launch({
             headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         const page = await browser.newPage();
-        await page.setContent(html, { waitUntil: "networkidle0" });
+        await page.setContent(html, {waitUntil: "networkidle0"});
 
         const fileName = `qayd_varaqasi_${uuidv4()}.pdf`;
         const filePath = `/root/admission_files/${fileName}`;
 
-        await page.pdf({ path: filePath, format: "A4" });
+        await page.pdf({path: filePath, format: "A4"});
         await browser.close();
 
         // ✅ Foydalanuvchiga faylni yuborish
@@ -837,6 +838,72 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
     }
 };
 
+
+export const download_contract = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const {admission_id} = req.params;
+
+
+        const admission = await admissionRepository.findOne({
+            where: {user_id: Number(admission_id), deleted: false},
+            order: {id: "desc"},
+            relations: ["edu_form", "edu_lang", "edu_direction", "admission_type",'user'],
+        });
+
+        if (!admission) throw RestException.notFound("shartnoma mavjud emaas")
+
+        // const templatePath = "/root/admission_files/contract.ejs";
+        const templatePath = "src/templates/contract.ejs";
+
+        const user = admission.user;
+    const data = {
+    contract_id:admission.user.passport_id,
+        date: formatDateToYMD(admission.created_at),
+        edu_direction:admission.edu_direction.name_uz,
+        edu_lang:admission.edu_lang.name_uz,
+        edu_type:admission.admission_type.name,
+        edu_form: admission.edu_form.name_uz,
+        contract_price:10000,
+        fio: `${user.first_name} ${user.last_name} ${user.patron}`,
+        address: user.address,
+        passport_id:user.passport_id,
+        phone_number:user.phone_number,
+        edu_year:4
+    };
+        const html = await ejs.renderFile(templatePath, data, {async: true});
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+        const page = await browser.newPage();
+        await page.setContent(html, {waitUntil: "networkidle0"});
+
+        const fileName = `shartnoma_${uuidv4()}.pdf`;
+        const filePath = `src/templates/${fileName}`;
+
+        await page.pdf({path: filePath, format: "A4"});
+        await browser.close();
+
+        // ✅ Foydalanuvchiga faylni yuborish
+        res.download(filePath, "/src/templates/contract.pdf", async (err) => {
+            try {
+                await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
+            } catch (unlinkErr) {
+                console.error("Faylni o‘chirishda xatolik:", unlinkErr);
+            }
+
+            if (err) {
+                next(err);
+            }
+        });
+
+
+    } catch (err) {
+        next(err)
+    }
+
+}
+
 function formatCustomDate(date: Date): string {
     const year = date.getFullYear();
     const day = String(date.getDate()).padStart(2, '0');
@@ -846,4 +913,12 @@ function formatCustomDate(date: Date): string {
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
     return `${year}-${day}-${month} ${hours}:${minutes}:${seconds}`;
+}
+
+export const formatDateToYMD = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0') // 0-based
+    const day = date.getDate().toString().padStart(2, '0')
+
+    return `${year}-${month}-${day}`
 }

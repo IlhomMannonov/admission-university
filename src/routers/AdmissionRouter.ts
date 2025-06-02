@@ -5,7 +5,7 @@ import {
     all_appointment,
     choice_admission_type,
     create_admission,
-    download_admission_request,
+    download_admission_request, download_contract,
     edu_data_select_options,
     enter_personal_data_auto,
     enter_personal_data_manual,
@@ -64,5 +64,8 @@ router.route("/get/:id")
 
 router.route("/create-admission")
     .post(verifyJwtToken(), create_admission)
+
+router.route("/download-contract/:admission_id")
+        .get(download_contract)
 
 export default router;
