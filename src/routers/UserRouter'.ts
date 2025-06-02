@@ -1,5 +1,5 @@
 import {Router} from "express";
-import {create_user, get_user, get_users, getMe,} from "../controller/UserController";
+import {create_user, edit_user, get_user, get_users, getMe,} from "../controller/UserController";
 import {verifyJwtToken} from "../middilwares/Security";
 
 const router: Router = Router();
@@ -12,6 +12,9 @@ router.route('/get-user/:id')
 
 router.route('/all')
     .get(verifyJwtToken(['admin', 'manager']), get_users);
+
+router.route('/edit/:id')
+    .put(verifyJwtToken(['admin', 'manager']), edit_user);
 
 router.route('/delete-user/:id')
     .delete(verifyJwtToken(['admin']));

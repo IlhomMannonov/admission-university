@@ -116,6 +116,67 @@ export const get_users = async (req: AuthenticatedRequest, res: Response, next: 
         next(err);
     }
 };
+export const edit_user = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const userId = req.params.id // URL orqali yuboriladi: /users/:id
+
+        const {
+            first_name,
+            last_name,
+            patron,
+            passport_file_id,
+            jshir,
+            passport_id,
+            birth_date,
+            phone_number,
+            gender,
+            passport_expire_date,
+            givenDate,
+            country,
+            region,
+            district,
+            address
+        } = req.body;
+
+        // 🔍 Foydalanuvchini bazadan topamiz
+        const user = await userRepository.findOne({
+            where: { id: Number(userId), deleted: false }
+        });
+
+        if (!user) {
+            throw RestException.notFound("Foydalanuvchi topilmadi");
+        }
+
+        // 🔄 Yangilash
+        user.first_name = first_name || user.first_name;
+        user.last_name = last_name || user.last_name;
+        user.patron = patron || user.patron;
+        user.passport_file_id = passport_file_id || user.passport_file_id;
+        user.jshir = jshir || user.jshir;
+        user.passport_id = passport_id || user.passport_id;
+        user.birth_date = birth_date ? new Date(birth_date) : user.birth_date;
+        user.phone_number = phone_number || user.phone_number;
+        user.gender = gender || user.gender;
+        user.passport_expire_date = passport_expire_date ? new Date(passport_expire_date) : user.passport_expire_date;
+        user.givenDate = givenDate ? new Date(givenDate) : user.givenDate;
+        user.country = country || user.country;
+        user.region = region || user.region;
+        user.district = district || user.district;
+        user.address = address || user.address;
+
+        // 📥 Bazaga saqlash
+        await userRepository.save(user);
+
+        res.status(200).json({
+            success: true,
+            message: 'Foydalanuvchi maʼlumotlari yangilandi',
+            data: user
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const delete_my = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     const user_id = req.params.id;
