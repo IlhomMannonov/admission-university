@@ -855,7 +855,7 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         if (!admission) throw RestException.notFound("shartnoma mavjud emaas")
 
         // const templatePath = "/root/admission_files/contract.ejs";
-        const templatePath = "src/templates/contract.ejs";
+        const templatePath = "/root/admission_files/contract.ejs";
 
         const user = admission.user;
     const data = {
@@ -872,7 +872,7 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         phone_number:user.phone_number,
         edu_year:admission.edu_direction.year,
         jshir:user.jshir,
-        qr_code: await generateQRCode("https://google.com")
+        qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission.id}`)
     };
 
         const html = await ejs.renderFile(templatePath, data, {async: true});
@@ -884,13 +884,13 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         await page.setContent(html, {waitUntil: "networkidle0"});
 
         const fileName = `shartnoma_${uuidv4()}.pdf`;
-        const filePath = `src/templates/${fileName}`;
+        const filePath = `/root/admission_files/${fileName}`;
 
         await page.pdf({path: filePath, format: "A4"});
         await browser.close();
 
         // ✅ Foydalanuvchiga faylni yuborish
-        res.download(filePath, "/src/templates/contract.pdf", async (err) => {
+        res.download(filePath, "/root/admission_files/contract.pdf", async (err) => {
             try {
                 await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
             } catch (unlinkErr) {
