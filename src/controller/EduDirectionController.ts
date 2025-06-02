@@ -13,9 +13,9 @@ const eduDirectionRepository = AppDataSource.getRepository(EduDirection)
 
 export const create = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code,contract_price} = req.body;
+        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code,contract_price, exam_name} = req.body;
 
-        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code','contract_price'], req.body);
+        validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code','contract_price','exam_name'], req.body);
 
         const edu_lang = await eduDirectionRepository.save({
             name_uz: name_uz,
@@ -24,7 +24,8 @@ export const create = async (req: AuthenticatedRequest, res: Response, next: Nex
             edu_lang_ids: edu_lang_ids,
             year: year,
             direction_code: direction_code,
-            contract_price: edu_lang_ids,
+            contract_price: contract_price,
+            exam_name: exam_name,
         });
         res.status(201).json({data: {edu_form: edu_lang}, success: true});
     } catch (error) {
@@ -46,6 +47,7 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
                     ed.year,
                     ed.direction_code,
                     ed.contract_price,
+                    ed.exam_name,
                     json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs
                 FROM edu_direction ed
                 LEFT JOIN LATERAL (
@@ -68,7 +70,7 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
 export const update = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {id} = req.params;
-        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code, contract_price} = req.body;
+        const {name_uz, name_en, name_ru, edu_lang_ids, year, direction_code, contract_price, exam_name} = req.body;
 
         const eduDirection = await eduDirectionRepository.findOneBy({id: Number(id), deleted: false});
         if (!eduDirection) {
@@ -81,6 +83,7 @@ export const update = async (req: AuthenticatedRequest, res: Response, next: Nex
         if (year !== undefined) eduDirection.year = year;
         if (direction_code !== undefined) eduDirection.direction_code = direction_code;
         if (contract_price !== undefined) eduDirection.contract_price = contract_price;
+        if (exam_name !== undefined) eduDirection.exam_name = exam_name;
         if (edu_lang_ids !== undefined) eduDirection.edu_lang_ids = edu_lang_ids;
 
 
