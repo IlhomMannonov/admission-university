@@ -872,7 +872,7 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         phone_number:user.phone_number,
         edu_year:admission.edu_direction.year,
         jshir:user.jshir,
-        qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission.id}`)
+        qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission_id}`)
     };
 
         const html = await ejs.renderFile(templatePath, data, {async: true});
