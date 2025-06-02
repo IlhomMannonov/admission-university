@@ -775,31 +775,46 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
         const queryBuilder = AppDataSource
             .getRepository(Admission)
             .createQueryBuilder('a')
-            .leftJoinAndSelect('a.user', 'user', 'user.state = :state', {state: 'passed'})
+            .leftJoinAndSelect('a.user', 'user', 'user.state = :state', { state: 'passed' })
             .leftJoinAndSelect('a.edu_form', 'edu_form')
             .leftJoinAndSelect('a.edu_lang', 'edu_lang')
             .leftJoinAndSelect('a.edu_direction', 'edu_direction')
             .leftJoinAndSelect('a.admission_type', 'admission_type')
             .where('a.deleted = false')
-            .andWhere('a.status <> :status', {status: 'progressing'});
+            .andWhere('a.status <> :status', { status: 'progressing' });
 
-        // FILTERLAR
+        // === FILTERLAR ===
         if (edu_form_ids) {
-            const ids = Array.isArray(edu_form_ids) ? edu_form_ids : [edu_form_ids];
-            queryBuilder.andWhere('a.edu_form_id IN (:...ids)', {ids});
+            const ids = typeof edu_form_ids === 'string'
+                ? edu_form_ids.split(',').map(id => Number(id))
+                : (edu_form_ids as string[]).map(id => Number(id));
+
+            if (ids.length) {
+                queryBuilder.andWhere('a.edu_form_id IN (:...ids_form)', { ids_form: ids });
+            }
         }
 
         if (edu_lang_ids) {
-            const ids = Array.isArray(edu_lang_ids) ? edu_lang_ids : [edu_lang_ids];
-            queryBuilder.andWhere('a.edu_lang_id IN (:...ids)', {ids});
+            const ids = typeof edu_lang_ids === 'string'
+                ? edu_lang_ids.split(',').map(id => Number(id))
+                : (edu_lang_ids as string[]).map(id => Number(id));
+
+            if (ids.length) {
+                queryBuilder.andWhere('a.edu_lang_id IN (:...ids_lang)', { ids_lang: ids });
+            }
         }
 
         if (edu_direction_ids) {
-            const ids = Array.isArray(edu_direction_ids) ? edu_direction_ids : [edu_direction_ids];
-            queryBuilder.andWhere('a.edu_direction_id IN (:...ids)', {ids});
+            const ids = typeof edu_direction_ids === 'string'
+                ? edu_direction_ids.split(',').map(id => Number(id))
+                : (edu_direction_ids as string[]).map(id => Number(id));
+
+            if (ids.length) {
+                queryBuilder.andWhere('a.edu_direction_id IN (:...ids_direction)', { ids_direction: ids });
+            }
         }
 
-        // QIDIRUV
+        // === QIDIRUV ===
         if (search) {
             const s = `%${search}%`;
             queryBuilder.andWhere(`
@@ -810,9 +825,10 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
                     user.last_name ILIKE :s OR
                     user.phone_number ILIKE :s
                 )
-            `, {s});
+            `, { s });
         }
 
+        // === PAGINATION va NATIJA ===
         queryBuilder
             .orderBy('a.created_at', 'DESC')
             .skip(offset)
@@ -821,11 +837,11 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
         const [data, total] = await queryBuilder.getManyAndCount();
 
         res.status(200).json({
+            success: true,
             data,
             total,
             page: Number(page),
-            last_page: Math.ceil(total / Number(limit)),
-            success: true
+            last_page: Math.ceil(total / Number(limit))
         });
     } catch (err) {
         next(err);
