@@ -759,8 +759,6 @@ export const download_admission_request = async (
     }
 };
 
-
-//BARCHA ARIZALAR
 export const all_appointment = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const {
@@ -768,61 +766,55 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
             limit = 20,
             edu_form_ids,
             edu_lang_ids,
-            edu_direction_ids
+            edu_direction_ids,
+            search
         } = req.query;
 
         const offset = (Number(page) - 1) * Number(limit);
 
         const queryBuilder = AppDataSource
-            .createQueryBuilder()
-            .select([
-                'a.id',
-                'a.edu_end_date',
-                'a.certificate_id',
-                'a.created_at',
-                'a.status',
-                'user.id',
-                'user.first_name',
-                'user.last_name',
-                'user.patron',
-                'edu_form.id',
-                'edu_form.name_uz',
-                'edu_lang.id',
-                'edu_lang.name_uz',
-                'edu_direction.id',
-                'edu_direction.name_uz',
-                'admission_type.id',
-                'admission_type.name',
-                'admission_type.status',
-                'admission_type.created_at',
-
-            ])
-            .from(Admission, 'a')
-            .innerJoin('a.user', 'user', 'user.state = :state', {state: 'passed'})
-            .leftJoin('a.edu_form', 'edu_form')
-            .leftJoin('a.edu_lang', 'edu_lang')
-            .leftJoin('a.edu_direction', 'edu_direction')
-            .leftJoin('a.admission_type', 'admission_type')
+            .getRepository(Admission)
+            .createQueryBuilder('a')
+            .leftJoinAndSelect('a.user', 'user', 'user.state = :state', {state: 'passed'})
+            .leftJoinAndSelect('a.edu_form', 'edu_form')
+            .leftJoinAndSelect('a.edu_lang', 'edu_lang')
+            .leftJoinAndSelect('a.edu_direction', 'edu_direction')
+            .leftJoinAndSelect('a.admission_type', 'admission_type')
             .where('a.deleted = false')
-            .andWhere('a.status <> :status', {status: 'progressing'})
+            .andWhere('a.status <> :status', {status: 'progressing'});
 
-
+        // FILTERLAR
         if (edu_form_ids) {
-            const formIds = Array.isArray(edu_form_ids) ? edu_form_ids : [edu_form_ids];
-            queryBuilder.andWhere('a.edu_form_id IN (:...formIds)', {formIds});
+            const ids = Array.isArray(edu_form_ids) ? edu_form_ids : [edu_form_ids];
+            queryBuilder.andWhere('a.edu_form_id IN (:...ids)', {ids});
         }
 
         if (edu_lang_ids) {
-            const langIds = Array.isArray(edu_lang_ids) ? edu_lang_ids : [edu_lang_ids];
-            queryBuilder.andWhere('a.edu_lang_id IN (:...langIds)', {langIds});
+            const ids = Array.isArray(edu_lang_ids) ? edu_lang_ids : [edu_lang_ids];
+            queryBuilder.andWhere('a.edu_lang_id IN (:...ids)', {ids});
         }
 
         if (edu_direction_ids) {
-            const directionIds = Array.isArray(edu_direction_ids) ? edu_direction_ids : [edu_direction_ids];
-            queryBuilder.andWhere('a.edu_direction_id IN (:...directionIds)', {directionIds});
+            const ids = Array.isArray(edu_direction_ids) ? edu_direction_ids : [edu_direction_ids];
+            queryBuilder.andWhere('a.edu_direction_id IN (:...ids)', {ids});
         }
 
-        queryBuilder.orderBy('a.created_at', 'DESC')
+        // QIDIRUV
+        if (search) {
+            const s = `%${search}%`;
+            queryBuilder.andWhere(`
+                (
+                    CAST(a.id AS TEXT) ILIKE :s OR
+                    CAST(user.id AS TEXT) ILIKE :s OR
+                    user.first_name ILIKE :s OR
+                    user.last_name ILIKE :s OR
+                    user.phone_number ILIKE :s
+                )
+            `, {s});
+        }
+
+        queryBuilder
+            .orderBy('a.created_at', 'DESC')
             .skip(offset)
             .take(Number(limit));
 
@@ -839,6 +831,7 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
         next(err);
     }
 };
+
 
 
 export const download_contract = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
