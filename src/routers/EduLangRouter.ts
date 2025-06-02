@@ -14,7 +14,7 @@ router.route('/delete/:id')
     .delete(verifyJwtToken(['admin']), remove);
 
 router.route('/all')
-    .get(verifyJwtToken, getAll);
+    .get(verifyJwtToken(), getAll);
 
 
 export default router;

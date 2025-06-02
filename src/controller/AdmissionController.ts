@@ -23,6 +23,8 @@ import {create_contact, create_deal, update_lead_status} from "../Service/AmoCRM
 import {Not} from "typeorm";
 import amo_config from '../../amo_crm_config.json';
 import {promises as fsPromises} from "fs";
+import QRCode from 'qrcode'
+
 
 const userRepository = AppDataSource.getRepository(User)
 const admissionTypeRepository = AppDataSource.getRepository(AdmissionType)
@@ -868,8 +870,11 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
         address: user.address,
         passport_id:user.passport_id,
         phone_number:user.phone_number,
-        edu_year:4
+        edu_year:admission.edu_direction.year,
+        jshir:user.jshir,
+        qr_code: await generateQRCode("https://google.com")
     };
+
         const html = await ejs.renderFile(templatePath, data, {async: true});
         const browser = await puppeteer.launch({
             headless: true,
@@ -921,4 +926,14 @@ export const formatDateToYMD = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, '0')
 
     return `${year}-${month}-${day}`
+}
+
+
+export const generateQRCode = async (text: string): Promise<string> => {
+    try {
+        const qrImageDataUrl = await QRCode.toDataURL(text)
+        return qrImageDataUrl // bu `data:image/png;base64,...` formatda
+    } catch (err) {
+        throw new Error('QR code generatsiya qilishda xatolik yuz berdi')
+    }
 }

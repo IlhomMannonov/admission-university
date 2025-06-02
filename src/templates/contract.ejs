@@ -332,9 +332,8 @@
         <div class="sec4 sec-mb section">
             <div class="section-title">3. TO‘LOV MIQDORLARI VA MUDDATLARI</div>
             <div class="item">
-                <b>3.1</b>	2025-2026-o‘quv yilida ta’lim olish uchun to‘lov qiymati QQSsiz <span class="underline" style="width: 150px"></span>
-                <br>
-                (<span class="underline"></span>) so‘mni tashkil etadi.
+                <b>3.1</b>	2025-2026-o‘quv yilida ta’lim olish uchun to‘lov qiymati QQSsiz <span ><%= contract_price || 'yoq' %></span>
+                <br>so‘mni tashkil etadi.
             </div>
             <div class="item">
                 <b>3.1</b>	Talaba yoki jismoniy shaxs to‘lovlarni amalga oshirishi uchun har bir o‘quv yilida alohida shartnoma rasmiylashtiriladi va keyingi o‘quv yillarida kontrakt miqdori o‘zgarishi mumkin.
@@ -493,7 +492,6 @@
             <div class="section-title">YURIST XULOSASI</div>
             <p style="margin-bottom: 2rem">Ushbu shartnoma O‘zbekiston Respublikasining amaldagi qonunchiligiga muvofiq Fuqarolik kodeksining kelishuvlar to‘g‘risidagi qoidalardan kelib chiqqan holda tuzilgan. </p>
             <div>
-                Yuriskonsult <span class="underline" style="width: 100px"></span> <span class="underline"></span>
             </div>
         </div>
         <div class="sec9 section">
@@ -520,8 +518,7 @@
                             <strong>Tel.:</strong> +99 879 222 07 00
                         </td>
                         <td>
-                            <div><%= fio || 'yoq' %></div>
-                            <div class="label-center">(F.I.Sh.)</div>
+                            <div> <strong>FIO:</strong> <%= fio || 'yoq' %></div>
 
                             <div><strong>Manzil:</strong> <span ><%= address || '' %></span></div><br>
 
@@ -543,10 +540,8 @@
                             <strong>Rahbar:</strong> Atamurodov Sherzod Akramovich
                         </td>
                         <td>
-                            <div><strong>STIR:</strong> <span class="input-line"></span></div><br>
-                            <div><strong>Tel.:</strong> <span class="input-line"></span></div><br>
-                            <div><strong>Telegram:</strong> <span class="input-line"></span></div><br>
-                            <div><strong>E-mail:</strong> <span class="input-line"></span></div><br>
+                            <div><strong>STIR:</strong> <span ><%= jshir || '' %></span></div><br>
+                            <div><strong>Tel.:</strong> <span> <%= phone_number || '' %></span></div><br>
                             <div><strong>Imzo:</strong> <span class="input-line"></span></div>
                         </td>
                     </tr>
@@ -556,6 +551,8 @@
         </div>
 
     </div>
+    <img class="photo" src="<%= qr_code %>" alt="photo" />
+
 
 
 </div>

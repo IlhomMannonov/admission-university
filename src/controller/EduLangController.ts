@@ -26,42 +26,45 @@ export const create = async (req: AuthenticatedRequest, res: Response, next: Nex
         next(error);
     }
 };
-export const getAll = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+
+
+
+export const getAll = async (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
     try {
-        const result = await AppDataSource
-            .createQueryRunner()
-            .query(`
-                SELECT
-                    el.id,
-                    el.name_uz,
-                    el.name_en,
-                    el.name_ru,
-                    el.status,
-                    el.edu_form_ids,
-                    json_agg(ef.*) FILTER (WHERE ef.id IS NOT NULL) AS edu_forms
-                FROM edu_lang el
-                LEFT JOIN LATERAL (
-                    SELECT 
-                        ef.id, 
-                        ef.name_uz, 
-                        ef.name_ru, 
-                        ef.name_en, 
-                        ef.status
-                    FROM edu_form ef
-                    WHERE ef.id = ANY(el.edu_form_ids) AND ef.deleted = false
-                ) ef ON true
-                WHERE el.deleted = false
-                GROUP BY el.id
-                ORDER BY el.created_at DESC
-            `);
+        const result = await AppDataSource.query(`
+      SELECT
+          el.id,
+          el.name_uz,
+          el.name_en,
+          el.name_ru,
+          el.status,
+          el.edu_form_ids,
+          json_agg(ef.*) FILTER (WHERE ef.id IS NOT NULL) AS edu_forms
+      FROM edu_lang el
+      LEFT JOIN LATERAL (
+          SELECT 
+              ef.id, 
+              ef.name_uz, 
+              ef.name_ru, 
+              ef.name_en, 
+              ef.status
+          FROM edu_form ef
+          WHERE ef.id = ANY(el.edu_form_ids) AND ef.deleted = false
+      ) ef ON true
+      WHERE el.deleted = false
+      GROUP BY el.id
+      ORDER BY el.created_at DESC
+    `)
 
-        res.status(200).json({ data: result, success: true });
+        res.status(200).send({ data: result, success: true })
     } catch (error) {
-        next(error);
+        next(error)
     }
-};
-
-
+}
 
 export const update = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
