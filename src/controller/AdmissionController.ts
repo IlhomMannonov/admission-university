@@ -768,7 +768,8 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
             edu_lang_ids,
             edu_direction_ids,
             search
-        } = req.query;
+        } = req.body;
+
 
         const offset = (Number(page) - 1) * Number(limit);
 
