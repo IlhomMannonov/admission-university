@@ -22,7 +22,7 @@ export const getMe = async (req: AuthenticatedRequest, res: Response, next: Next
         if (!user) throw RestException.notFound("USER");
         user.password = ''
 
-        user.pasport_is_avto = true;
+        user.pasport_is_avto = false;
         res.status(200).json(user);
 
     } catch (err) {
