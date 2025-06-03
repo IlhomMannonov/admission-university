@@ -856,7 +856,7 @@ export const download_contract = async (req: AuthenticatedRequest, res: Response
 
 
         const admission = await admissionRepository.findOne({
-            where: {user_id: Number(admission_id), deleted: false},
+            where: {id: Number(admission_id), deleted: false},
             order: {id: "desc"},
             relations: ["edu_form", "edu_lang", "edu_direction", "admission_type",'user'],
         });
