@@ -937,7 +937,7 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
         const user = admission.user;
 
         const data = {
-            cid: user.passport_id,
+            contract_id: user.passport_id,
             date: formatDateToYMD(admission.created_at),
             edu_direction: admission.edu_direction.name_uz,
             edu_lang: admission.edu_lang.name_uz,
@@ -962,7 +962,8 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
             linebreaks: true
         });
 
-        doc.render({ data });
+        doc.setData(data);  // 1-qadam
+        doc.render();
 
         try {
             doc.render();
