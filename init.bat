@@ -3,7 +3,7 @@ set SERVER=62.113.58.42
 set USERNAME=root
 set PASSWORD=57246Abs
 set LOCAL_DIR="B:\Projects Vue\admission_universitet\dist"
-set REMOTE_DIR=/root/admission
+set REMOTE_DIR=/root/admission-university
 
 set ARCHIVE_PATH="B:\Projects Vue\admission_universitet\dist.tar.gz"
 
@@ -22,7 +22,7 @@ echo Files uploaded. Extracting on server and starting project...
 
 REM SSH orqali serverda arxivni ochish va `node index.js` buyrug'ini ishga tushirish
 ssh %USERNAME%@%SERVER% "cd %REMOTE_DIR% && tar -xzvf dist.tar.gz && npm install && tsc "
-ssh %USERNAME%@%SERVER% "cd %REMOTE_DIR% && rm dist.tar.gz && cp .env dist/.env && pm2 stop index && pm2 start /root/admission/dist/index.js --env production"
+ssh %USERNAME%@%SERVER% "cd %REMOTE_DIR% && rm dist.tar.gz && cp .env dist/.env && pm2 stop index && pm2 start /root/admission-university/dist/index.js --env production  --name qabul --max-memory-restart 100M"
 
 echo Project started on server.
 pause
