@@ -956,8 +956,11 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
         const templatePath = path.resolve('src/templates/contract_template.docx');
         const content = fs.readFileSync(templatePath, 'binary');
 
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+        const zip = new PizZip(fs.readFileSync(templatePath, 'binary'));
+        const doc = new Docxtemplater(zip, {
+            paragraphLoop: true,
+            linebreaks: true
+        });
 
         doc.render(data);
 
