@@ -937,7 +937,7 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
         const user = admission.user;
 
         const data = {
-            contract_id: user.passport_id,
+            cntrct_id: user.passport_id,
             date: formatDateToYMD(admission.created_at),
             edu_direction: admission.edu_direction.name_uz,
             edu_lang: admission.edu_lang.name_uz,
