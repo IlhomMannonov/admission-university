@@ -959,7 +959,7 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
         const zip = new PizZip(content);
         const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-        doc.setData(data);
+        doc.render(data);
 
         try {
             doc.render();
