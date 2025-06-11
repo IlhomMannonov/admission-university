@@ -962,7 +962,7 @@ export const download_contract_pdf = async (req: AuthenticatedRequest, res: Resp
             linebreaks: true
         });
 
-        doc.render(data);
+        doc.render({ data });
 
         try {
             doc.render();
