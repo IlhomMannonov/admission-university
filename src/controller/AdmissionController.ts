@@ -18,13 +18,16 @@ import puppeteer from 'puppeteer';
 import ejs from 'ejs';
 import path from 'path';
 import {v4 as uuidv4} from 'uuid';
-import fs from 'fs/promises';
 import {create_contact, create_deal, update_lead_status} from "../Service/AmoCRMServise";
 import {Not} from "typeorm";
 import amo_config from '../../amo_crm_config.json';
 import {promises as fsPromises} from "fs";
 import QRCode from 'qrcode'
-
+import fs from 'fs'
+import PizZip from "pizzip";
+import Docxtemplater from "docxtemplater";
+import { exec } from 'child_process'
+import util from 'util'
 
 const userRepository = AppDataSource.getRepository(User)
 const admissionTypeRepository = AppDataSource.getRepository(AdmissionType)
@@ -851,73 +854,145 @@ export const all_appointment = async (req: AuthenticatedRequest, res: Response, 
 
 
 
-export const download_contract = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
-    try {
-        const {admission_id} = req.params;
+    export const download_contract = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+        try {
+            const {admission_id} = req.params;
 
+
+            const admission = await admissionRepository.findOne({
+                where: {id: Number(admission_id), deleted: false},
+                order: {id: "desc"},
+                relations: ["edu_form", "edu_lang", "edu_direction", "admission_type",'user'],
+            });
+
+            if (!admission) throw RestException.notFound("shartnoma mavjud emaas")
+
+            // const templatePath = "/root/admission_files/contract.ejs";
+            const templatePath = "/root/admission_files/contract.ejs";
+
+            const user = admission.user;
+        const data = {
+        contract_id:admission.user.passport_id,
+            date: formatDateToYMD(admission.created_at),
+            edu_direction:admission.edu_direction.name_uz,
+            edu_lang:admission.edu_lang.name_uz,
+            edu_type:admission.admission_type.name,
+            edu_form: admission.edu_form.name_uz,
+            contract_price:admission.edu_direction.contract_price,
+            fio: `${user.first_name} ${user.last_name} ${user.patron}`,
+            address: user.address,
+            passport_id:user.passport_id,
+            phone_number:user.phone_number,
+            edu_year:admission.edu_direction.year,
+            direction_code:admission.edu_direction.direction_code,
+            jshir:user.jshir,
+            qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission_id}`)
+        };
+
+            const html = await ejs.renderFile(templatePath, data, {async: true});
+            const browser = await puppeteer.launch({
+                headless: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
+            });
+            const page = await browser.newPage();
+            await page.setContent(html, {waitUntil: "networkidle0"});
+
+            const fileName = `shartnoma_${uuidv4()}.pdf`;
+            const filePath = `/root/admission_files/${fileName}`;
+
+            await page.pdf({path: filePath, format: "A4"});
+            await browser.close();
+
+            // ✅ Foydalanuvchiga faylni yuborish
+            res.download(filePath, "/root/admission_files/contract.pdf", async (err) => {
+                try {
+                    await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
+                } catch (unlinkErr) {
+                    console.error("Faylni o‘chirishda xatolik:", unlinkErr);
+                }
+
+                if (err) {
+                    next(err);
+                }
+            });
+
+
+        } catch (err) {
+            next(err)
+        }
+
+    }
+const execPromise = util.promisify(exec)
+export const download_contract_pdf = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const { admission_id } = req.params;
 
         const admission = await admissionRepository.findOne({
-            where: {id: Number(admission_id), deleted: false},
-            order: {id: "desc"},
-            relations: ["edu_form", "edu_lang", "edu_direction", "admission_type",'user'],
+            where: { id: Number(admission_id), deleted: false },
+            relations: ["edu_form", "edu_lang", "edu_direction", "admission_type", "user"]
         });
 
-        if (!admission) throw RestException.notFound("shartnoma mavjud emaas")
-
-        // const templatePath = "/root/admission_files/contract.ejs";
-        const templatePath = "/root/admission_files/contract.ejs";
+        if (!admission) throw RestException.notFound("Shartnoma topilmadi")
 
         const user = admission.user;
-    const data = {
-    contract_id:admission.user.passport_id,
-        date: formatDateToYMD(admission.created_at),
-        edu_direction:admission.edu_direction.name_uz,
-        edu_lang:admission.edu_lang.name_uz,
-        edu_type:admission.admission_type.name,
-        edu_form: admission.edu_form.name_uz,
-        contract_price:admission.edu_direction.contract_price,
-        fio: `${user.first_name} ${user.last_name} ${user.patron}`,
-        address: user.address,
-        passport_id:user.passport_id,
-        phone_number:user.phone_number,
-        edu_year:admission.edu_direction.year,
-        direction_code:admission.edu_direction.direction_code,
-        jshir:user.jshir,
-        qr_code: await generateQRCode(`${process.env.APP_URL}/admission/download-contract/${admission_id}`)
-    };
 
-        const html = await ejs.renderFile(templatePath, data, {async: true});
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
-        });
-        const page = await browser.newPage();
-        await page.setContent(html, {waitUntil: "networkidle0"});
+        const data = {
+            contract_id: user.passport_id,
+            date: formatDateToYMD(admission.created_at),
+            edu_direction: admission.edu_direction.name_uz,
+            edu_lang: admission.edu_lang.name_uz,
+            edu_type: admission.admission_type.name,
+            edu_form: admission.edu_form.name_uz,
+            contract_price: admission.edu_direction.contract_price,
+            fio: `${user.first_name} ${user.last_name} ${user.patron}`,
+            address: user.address,
+            passport_id: user.passport_id,
+            phone_number: user.phone_number,
+            edu_year: admission.edu_direction.year,
+            direction_code: admission.edu_direction.direction_code,
+            jshir: user.jshir
+        };
 
-        const fileName = `shartnoma_${uuidv4()}.pdf`;
-        const filePath = `/root/admission_files/${fileName}`;
+        const templatePath = path.resolve('src/templates/contract_template.docx');
+        const content = fs.readFileSync(templatePath, 'binary');
 
-        await page.pdf({path: filePath, format: "A4"});
-        await browser.close();
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
 
-        // ✅ Foydalanuvchiga faylni yuborish
-        res.download(filePath, "/root/admission_files/contract.pdf", async (err) => {
+        doc.setData(data);
+
+        try {
+            doc.render();
+        } catch (error) {
+            console.error("DOCX render error:", error);
+            throw error;
+        }
+
+        const docxFileName = `contract_${uuidv4()}.docx`;
+        const docxPath = `src/templates/${docxFileName}`;
+        fs.writeFileSync(docxPath, doc.getZip().generate({ type: 'nodebuffer' }));
+
+        const pdfFileName = docxFileName.replace('.docx', '.pdf');
+        const pdfPath = `src/templates/${pdfFileName}`;
+
+        // 🧠 LibreOffice orqali PDF ga aylantirish
+        await execPromise(`libreoffice --headless --convert-to pdf --outdir src/templates ${docxPath}`);
+
+        // ❗ PDF faylni foydalanuvchiga jo‘natish
+        res.download(pdfPath, 'contract.pdf', async (err) => {
             try {
-                await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
+                await fsPromises.unlink(docxPath)
+                await fsPromises.unlink(pdfPath)
             } catch (unlinkErr) {
-                console.error("Faylni o‘chirishda xatolik:", unlinkErr);
+                console.error("Faylni o‘chirishda xatolik:", unlinkErr)
             }
 
-            if (err) {
-                next(err);
-            }
+            if (err) next(err)
         });
-
 
     } catch (err) {
         next(err)
     }
-
 }
 
 function formatCustomDate(date: Date): string {
