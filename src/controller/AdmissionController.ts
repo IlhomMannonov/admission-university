@@ -377,7 +377,7 @@ export const reject_my_request = async (req: AuthenticatedRequest, res: Response
         });
         if (!admission) throw RestException.badRequest(__("admission.not_found"))
 
-        if (admission.status !== 'pending') {
+        if (admission.status == 'accepted') {
             throw RestException.badRequest(__("admission.no_access_rejecting"))
         }
         admission.deleted = true;
