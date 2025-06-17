@@ -2,10 +2,12 @@ import {Router} from "express";
 import {
     accept_step_3,
     accept_step_4,
-    all_appointment, check_passport,
+    all_appointment,
+    check_passport,
     choice_admission_type,
     create_admission,
-    download_admission_request, download_contract,
+    download_admission_request,
+    download_contract_pdf,
     edu_data_select_options,
     enter_personal_data_auto,
     enter_personal_data_manual,
@@ -66,6 +68,6 @@ router.route("/create-admission")
     .post(verifyJwtToken(), create_admission)
 
 router.route("/download-contract/:admission_id")
-        .get(download_contract)
+        .get(download_contract_pdf)
 
 export default router;
