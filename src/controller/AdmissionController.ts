@@ -700,11 +700,7 @@ export const download_admission_request = async (
             fullName: `${user.last_name} ${user.first_name} ${user.patron || ""}`,
             birthDate: user.birth_date,
             gender:
-                user.gender === "male"
-                    ? "Erkak"
-                    : user.gender === "female"
-                        ? "Ayol"
-                        : "—",
+                user.gender ,
             passport: `${user.passport_id} : ${user.jshir}`,
             phone: user.phone_number,
             citizenship: user.country || "",
@@ -737,13 +733,13 @@ export const download_admission_request = async (
         await page.setContent(html, {waitUntil: "networkidle0"});
 
         const fileName = `qayd_varaqasi_${uuidv4()}.pdf`;
-        const filePath = `/root/admission_files/${fileName}`;
+        const filePath = `/app/uploads/${fileName}`;
 
         await page.pdf({path: filePath, format: "A4"});
         await browser.close();
 
         // ✅ Foydalanuvchiga faylni yuborish
-        res.download(filePath, "/root/admission_files/qayd_varaqasi.pdf", async (err) => {
+        res.download(filePath, "/app/uploads/qayd_varaqasi.pdf", async (err) => {
             try {
                 await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
             } catch (unlinkErr) {
