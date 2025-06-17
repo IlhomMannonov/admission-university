@@ -72,7 +72,7 @@ export const getFile = async (req: Request, res: Response, next: NextFunction): 
         const attachment = await attachmentRepository.findOne({where: {id: Number(file_id)}});
         if (!attachment) throw RestException.notFound("Fayl topilmadi");
 
-        const filePath = path.join('/root/admission_files', attachment.file_name);
+        const filePath = path.join('/app/uploads', attachment.file_name);
 
         if (!fs.existsSync(filePath)) {
             res.status(404).json({message: 'Fayl serverda mavjud emas!'});
@@ -88,7 +88,7 @@ export const getFile = async (req: Request, res: Response, next: NextFunction): 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = '/root/admission_files'; // Fayllar saqlanadigan papkani ko'rsatish
+        const uploadPath = '/app/uploads'; // Fayllar saqlanadigan papkani ko'rsatish
 
         // Papka mavjudligini tekshirish va kerak bo'lsa yaratish
         if (!fs.existsSync(uploadPath)) {
