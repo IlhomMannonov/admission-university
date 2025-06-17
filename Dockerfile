@@ -1,6 +1,6 @@
 FROM node:18
 
-# Chrome uchun kerakli system kutubxonalarni o‘rnatamiz
+# Chrome va LibreOffice uchun kerakli kutubxonalarni o‘rnatamiz
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     libxdamage1 \
     libxrandr2 \
     xdg-utils \
+    libreoffice \
     --no-install-recommends \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
