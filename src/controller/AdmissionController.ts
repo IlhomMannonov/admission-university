@@ -683,7 +683,7 @@ export const download_admission_request = async (
 
         if (!admission) throw RestException.notFound("Admission not found");
 
-        const templatePath = "/root/admission_files/qayd.ejs";
+        const templatePath = "/app/uploads/qayd.ejs";
 
         const base64Photo = user.photo
             ? user.photo.startsWith("data:image")
