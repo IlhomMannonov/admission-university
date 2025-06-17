@@ -704,7 +704,7 @@ export const download_admission_request = async (
             passport: `${user.passport_id} : ${user.jshir}`,
             phone: user.phone_number,
             citizenship: user.country || "",
-            address: user.address || "—",
+            address: user.address ,
             school: edu_ins?.name_uz || "—",
             graduationYear: admission.edu_end_date
                 ? new Date(admission.edu_end_date).getFullYear()

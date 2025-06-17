@@ -203,10 +203,12 @@
                     </div>
                 </div>
                 <div class="grid2">
+                    <% if (address) { %>
                     <div class='about-item'>
                         <strong class='label'>Doimiy yashash manzili:</strong>
                         <span class="value value2"><%= address || 'Yo‘q' %></span>
                     </div>
+                        <% } %>
                     <div class="about-item">
                         <strong class='label'>Umumta'lim muassasasi:</strong>
                         <span class="value value2"><%= school || 'Yo‘q' %></span>
