@@ -200,7 +200,7 @@ export const edu_data_select_options = async (req: AuthenticatedRequest, res: Re
     try {
         const eduDirections = await eduDirectionRepository.find({
             where: {deleted: false},
-            select: ['id', 'name_uz', 'name_en', 'name_ru', 'edu_lang_ids']
+            select: ['id', 'name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'edu_form_id']
         });
 
         const eduLangs = await eduLangRepository.find({
