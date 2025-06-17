@@ -14,7 +14,7 @@ services:
       - DB_PASS=root123
       - DB_NAME=admission
     networks:
-      - shared-nets
+      - shared-net   # ✅ to‘g‘rilandi
     restart: always
     volumes:
       - /root/admission_files:/app/uploads
