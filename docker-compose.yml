@@ -11,10 +11,10 @@ services:
       - DB_HOST=postgres-database
       - DB_PORT=5432
       - DB_USER=postgres
-      - DB_PASS=root123
+      - DB_PASS=57246Abs
       - DB_NAME=admission
     networks:
-      - shared-net
+      - shared-nets
     restart: always
     volumes:
       - /root/admission_files:/app/uploads
