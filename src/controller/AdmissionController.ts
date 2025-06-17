@@ -246,7 +246,7 @@ export const accept_step_3 = async (req: AuthenticatedRequest, res: Response, ne
         }
         admission.edu_end_date = new Date(`${end_date}-01-01`)
         user.state = 'edu-directions'
-        user.edu_ins_id = edu_ins
+        admission.edu_ins_id = Number(edu_ins_id)
         await userRepository.save(user)
         await admissionRepository.save(admission)
 

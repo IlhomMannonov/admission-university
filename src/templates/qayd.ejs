@@ -166,7 +166,9 @@
             <div class="info section">
                 <div class="section-title">Shaxsiy Ma’lumotlar</div>
                 <div class="grid1">
+                    <% if (photo) { %>
                     <img class="photo" src="<%= photo %>" alt="photo" />
+                        <% } %>
                     <div class='about'>
                         <div class="about-item">
                             <strong class='label'>ID:</strong>
@@ -184,14 +186,12 @@
                             <strong class='label'>Tug'ilgan sanasi:</strong>
                             <span class="value"><%= birthDate || 'Yo‘q' %></span>
                         </div>
-                        <div class="about-item">
-                            <strong class='label'>Jinsi:</strong>
-                            <span class="value"><%= gender || 'Yo‘q' %></span>
-                        </div>
-                        <div class="about-item">
-                            <strong class='label'>Fuqaroligi:</strong>
-                            <span class="value"><%= citizenship || 'Yo‘q' %></span>
-                        </div>
+                        <% if (gender) { %>
+                            <div class="about-item">
+                                <strong class='label'>Jinsi:</strong>
+                                <span class="value"><%= gender %></span>
+                            </div>
+                        <% } %>
                         <div class="about-item">
                             <strong class='label'>Telefon raqami:</strong>
                             <span class="value"><%= phone || 'Yo‘q' %></span>
@@ -245,7 +245,7 @@
             </div>
 
             <div class="subs section">
-                <div class="section-title">Imtiyozlar</div>
+<!--                <div class="section-title">Imtiyozlar</div>-->
 <!--                <div class="grid">-->
 <!--                    <div>-->
 <!--                        <div class="subs-item">-->
@@ -287,9 +287,14 @@
                 </div>
             </div>
         </div>
-
+        <%
+        const now = new Date()
+        const uzTime = new Date(now.getTime() + 5 * 60 * 60 * 1000)
+        const pad = n => n.toString().padStart(2, '0')
+        const formatted = `${uzTime.getFullYear()}-${pad(uzTime.getMonth() + 1)}-${pad(uzTime.getDate())} ${pad(uzTime.getHours())}:${pad(uzTime.getMinutes())}`
+        %>
         <div class="footer">
-            <strong><em>Ko‘chirib olingan vaqt: <%= new Date() || 'Yo‘q' %></em></strong>
+            <strong><em>Ko‘chirib olingan vaqt: <%= formatted %></em></strong>
         </div>
     </div>
 </div>
