@@ -7,12 +7,7 @@ services:
     ports:
       - "18080:8080"
     environment:
-      - NODE_ENV=production
-      - DB_HOST=postgres-database
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASS=57246Abs
-      - DB_NAME=admission
+      - .env
     networks:
       - shared-net   # ✅ to‘g‘rilandi
     restart: always
