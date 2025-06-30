@@ -5,7 +5,7 @@ services:
     build: sharq-university
     container_name: sharq-university-dev
     env_file:
-      - .env.dev
+      - .env
     ports:
       - "18081:8080"
     networks:
