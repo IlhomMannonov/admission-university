@@ -29,14 +29,14 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # package.json va tsconfig.json fayllarni yuklaymiz
-COPY package*.json ./
+COPY ../package*.json ./
 COPY ../tsconfig.json ./
 
 # Kutubxonalarni o‘rnatamiz
 RUN npm install
 
 # Qolgan fayllarni yuklaymiz
-COPY sharq-university .
+COPY ../../admission_universitet .
 
 # TypeScriptni compile qilamiz
 RUN npm run build
