@@ -1,6 +1,6 @@
 FROM node:18
 
-# Chrome va LibreOffice uchun kerakli kutubxonalarni o‘rnatamiz
+# LibreOffice va Chrome kutubxonalarini o‘rnatamiz
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -26,21 +26,27 @@ RUN apt-get update && apt-get install -y \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+# Ishchi papkani belgilaymiz
 WORKDIR /app
 
-# package.json va tsconfig.json fayllarni yuklaymiz
+# package va tsconfig fayllarni ko'chiramiz
 COPY package*.json ./
 COPY tsconfig.json ./
+
+# TypeScript global install (agar kerak bo‘lsa)
+RUN npm install -g typescript
 
 # Kutubxonalarni o‘rnatamiz
 RUN npm install
 
-# Qolgan fayllarni yuklaymiz
-COPY ../ .
+# src/ va qolgan fayllarni konteynerga nusxalaymiz
+COPY ./src ./src
 
-# TypeScriptni compile qilamiz
+# TypeScript build
 RUN npm run build
 
+# Tizim porti
 EXPOSE 8080
 
+# Appni ishga tushiramiz
 CMD ["npm", "start"]
