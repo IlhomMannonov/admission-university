@@ -2,6 +2,10 @@ FROM node:18
 
 # Chrome va LibreOffice uchun kerakli kutubxonalarni o‘rnatamiz
 RUN apt-get update && apt-get install -y \
+    build-essential \
+    python3 \
+    make \
+    g++ \
     wget \
     ca-certificates \
     fonts-liberation \
