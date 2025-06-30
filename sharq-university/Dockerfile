@@ -36,8 +36,7 @@ COPY ../tsconfig.json ./
 RUN npm install
 
 # Qolgan fayllarni yuklaymiz
-COPY ../src .
-
+COPY ../ .
 
 # TypeScriptni compile qilamiz
 RUN npm run build
