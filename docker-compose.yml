@@ -1,23 +1,35 @@
 version: '3.8'
 
 services:
-  app:
-    build: .
+  sharq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: sharq
     container_name: sharq-university
+    env_file: .env.sharq
     ports:
-      - "18080:8080"
-    environment:
-      - NODE_ENV=production
-      - DB_HOST=postgres-database
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASS=57246Abs
-      - DB_NAME=admission
-    networks:
-      - shared-net
-    restart: always
+      - "18081:8080"
     volumes:
       - /root/admission_files:/app/uploads
+    networks:
+      - shared-net
+
+  bxu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_ENV: bxu
+    container_name: bxu-university
+    env_file: .env.bxu
+    ports:
+      - "18082:8080"
+    volumes:
+      - /root/admission_files:/app/uploads
+    networks:
+      - shared-net
 
 networks:
   shared-net:
