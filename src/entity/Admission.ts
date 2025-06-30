@@ -16,7 +16,7 @@ export class Admission extends BaseEntityFull {
     @Column({name: 'user', nullable: true})
     user_id!: number; // Foreign key sifatida saqlanad
 
-
+    //
     @ManyToOne(() => AdmissionType, admission_type => admission_type.id)
     @JoinColumn({name: 'admission_type_id'})
     admission_type!: AdmissionType;
