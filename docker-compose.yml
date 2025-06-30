@@ -3,7 +3,7 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: sharq-university
+    container_name: admission-university
     ports:
       - "18080:8080"
     environment:
@@ -14,7 +14,7 @@ services:
       - DB_PASS=57246Abs
       - DB_NAME=admission
     networks:
-      - shared-net
+      - shared-net   # ✅ to‘g‘rilandi
     restart: always
     volumes:
       - /root/admission_files:/app/uploads
