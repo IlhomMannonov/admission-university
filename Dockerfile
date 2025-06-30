@@ -1,5 +1,6 @@
 FROM node:18
 
+# Chrome va LibreOffice uchun kerakli kutubxonalarni o‘rnatamiz
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -27,17 +28,17 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# package.json va tsconfig.json ni nusxalash
+# package.json va tsconfig.json fayllarni yuklaymiz
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Kutubxonalarni o‘rnatish
+# Kutubxonalarni o‘rnatamiz
 RUN npm install
 
-# Loyihaning barcha manbalarini nusxalash
-COPY src .
+# Qolgan fayllarni yuklaymiz
+COPY ../ .
 
-# TypeScript kompilyatsiyasi
+# TypeScriptni compile qilamiz
 RUN npm run build
 
 EXPOSE 8080
