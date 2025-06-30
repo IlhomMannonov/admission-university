@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   app:
-    build: bxu-university
+    build: .
     container_name: bxu-university
     ports:
       - "18080:8080"
