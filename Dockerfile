@@ -35,7 +35,7 @@ COPY tsconfig.json ./
 RUN npm install
 
 # Loyihaning barcha manbalarini nusxalash
-COPY src .
+COPY ./src ./src
 
 # TypeScript kompilyatsiyasi
 RUN npm run build
