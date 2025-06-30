@@ -36,7 +36,7 @@ COPY ../tsconfig.json ./
 RUN npm install
 
 # Qolgan fayllarni yuklaymiz
-COPY ../../admission_universitet .
+COPY ../src .
 
 # TypeScriptni compile qilamiz
 RUN npm run build
