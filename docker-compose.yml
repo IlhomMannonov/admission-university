@@ -3,29 +3,29 @@ version: '3.8'
 services:
   app_dev:
     build: sharq-university
-    container_name: sharq-university-dev
+    container_name: sharq-university
     env_file:
-      - .env
+      - .env.sharq-university
     ports:
       - "18081:8080"
     networks:
       - shared-net
     restart: always
     volumes:
-      - /root/admission_dev_files:/app/uploads
+      - /root/admission_files:/app/uploads
 
   app_prod:
     build: bxu-university
-    container_name: sharq-university-prod
+    container_name: bxu-university
     env_file:
-      - .env.prod
+      - .env.bxu-university
     ports:
       - "18081:8081"
     networks:
       - shared-net
     restart: always
     volumes:
-      - /root/admission_prod_files:/app/uploads
+      - /root/admission_files:/app/uploads
 
 networks:
   shared-net:
