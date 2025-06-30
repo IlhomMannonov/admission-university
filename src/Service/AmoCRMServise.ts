@@ -276,7 +276,6 @@ export const update_lead_status = async (pipeline_id: any, status_id: any, lead_
 
         return response.data;
     } catch (error: any) {
-        console.error('Lead status update xatosi:', error.response?.data || error.message);
-        throw error;
+        console.error('Lead status update xatosi:', error.response?.data || error.message)
     }
 };

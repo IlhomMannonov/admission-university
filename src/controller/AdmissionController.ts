@@ -25,6 +25,7 @@ import fs, {promises as fsPromises} from "fs";
 import QRCode from 'qrcode'
 import {exec} from 'child_process'
 import util from 'util'
+
 import AdmZip from 'adm-zip'
 
 const userRepository = AppDataSource.getRepository(User)
@@ -245,7 +246,7 @@ export const accept_step_3 = async (req: AuthenticatedRequest, res: Response, ne
         }
         admission.edu_end_date = new Date(`${end_date}-01-01`)
         user.state = 'edu-directions'
-        user.edu_ins_id = edu_ins
+        admission.edu_ins_id = Number(edu_ins_id)
         await userRepository.save(user)
         await admissionRepository.save(admission)
 
@@ -682,7 +683,7 @@ export const download_admission_request = async (
 
         if (!admission) throw RestException.notFound("Admission not found");
 
-        const templatePath = "/root/admission_files/qayd.ejs";
+        const templatePath = "/app/uploads/qayd.ejs";
 
         const base64Photo = user.photo
             ? user.photo.startsWith("data:image")
@@ -699,15 +700,11 @@ export const download_admission_request = async (
             fullName: `${user.last_name} ${user.first_name} ${user.patron || ""}`,
             birthDate: user.birth_date,
             gender:
-                user.gender === "male"
-                    ? "Erkak"
-                    : user.gender === "female"
-                        ? "Ayol"
-                        : "—",
+                user.gender ,
             passport: `${user.passport_id} : ${user.jshir}`,
             phone: user.phone_number,
             citizenship: user.country || "",
-            address: user.address || "—",
+            address: user.address ,
             school: edu_ins?.name_uz || "—",
             graduationYear: admission.edu_end_date
                 ? new Date(admission.edu_end_date).getFullYear()
@@ -736,13 +733,13 @@ export const download_admission_request = async (
         await page.setContent(html, {waitUntil: "networkidle0"});
 
         const fileName = `qayd_varaqasi_${uuidv4()}.pdf`;
-        const filePath = `/root/admission_files/${fileName}`;
+        const filePath = `/app/uploads/${fileName}`;
 
         await page.pdf({path: filePath, format: "A4"});
         await browser.close();
 
         // ✅ Foydalanuvchiga faylni yuborish
-        res.download(filePath, "/root/admission_files/qayd_varaqasi.pdf", async (err) => {
+        res.download(filePath, "/app/uploads/qayd_varaqasi.pdf", async (err) => {
             try {
                 await fsPromises.unlink(filePath); // Faylni avtomatik o‘chiramiz
             } catch (unlinkErr) {

@@ -22,7 +22,7 @@ export const send_sms = async (code: string, phone: string): Promise<void> => {
     formData.append("mobile_phone", phone);
     formData.append("from", "4546");
     // formData.append("message", `Hurmatli ${code}! ${code} dan ${code} so'm qarz oldingiz. Jami qarzingiz ${code} so'm. Tashrifingiz uchun tashakkur!`);
-    formData.append("message", `Sharq University. Qabuldan o'tish uchun tasdiqlash kod: ${code}`);
+    formData.append("message", `Sharq Universiteti. Qabuldan o'tish uchun tasdiqlash kod: ${code}`);
 
     const token = await loginEskiz()
 
