@@ -33,8 +33,8 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # package.json va tsconfig.json fayllarni yuklaymiz
-COPY package*.json ./
-COPY tsconfig.json ./
+COPY ../package*.json ./
+COPY ../tsconfig.json ./
 
 # Kutubxonalarni o‘rnatamiz
 RUN npm install

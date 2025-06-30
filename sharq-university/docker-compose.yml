@@ -2,24 +2,26 @@ version: '3.8'
 
 services:
   app:
-    env_file:
-      - .env
-    build: .
     container_name: sharq-university
+    build:
+      context: .         # Dockerfile shu papkada bo‘lsa
+      dockerfile: Dockerfile
+    env_file:
+      - .env             # .env fayldan o'zgaruvchilarni oladi
+    environment:
+      NODE_ENV: production
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
     ports:
       - "18080:8080"
-    environment:
-      - NODE_ENV=production
-      - DB_HOST=postgres-database
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PASS=57246Abs
-      - DB_NAME=admission
-    networks:
-      - shared-net   # ✅ to‘g‘rilandi
-    restart: always
     volumes:
       - /root/admission_files:/app/uploads
+    networks:
+      - shared-net
+    restart: always
 
 networks:
   shared-net:
