@@ -1,7 +1,5 @@
 FROM node:18
 
-ARG APP_ENV
-
 RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
@@ -29,13 +27,17 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+# package.json va tsconfig.json ni nusxalash
 COPY package*.json ./
 COPY tsconfig.json ./
 
-RUN npm install --production=false
+# Kutubxonalarni o‘rnatish
+RUN npm install
 
-COPY ./src ./src
+# Loyihaning barcha manbalarini nusxalash
+COPY src .
 
+# TypeScript kompilyatsiyasi
 RUN npm run build
 
 EXPOSE 8080
