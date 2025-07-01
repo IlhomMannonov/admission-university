@@ -22,7 +22,8 @@ export const create = async (req: AuthenticatedRequest, res: Response, next: Nex
             direction_code,
             contract_price,
             exam_name,
-            edu_form_id
+            edu_form_id,
+            admission_type_id
         } = req.body;
 
         validFields(['name_uz', 'name_en', 'name_ru', 'edu_lang_ids', 'year', 'direction_code', 'contract_price', 'exam_name', 'edu_form_id'], req.body);
@@ -37,6 +38,7 @@ export const create = async (req: AuthenticatedRequest, res: Response, next: Nex
             contract_price: contract_price,
             exam_name: exam_name,
             edu_form_id: edu_form_id,
+            admission_type_id: admission_type_id,
         });
         res.status(201).json({data: {edu_form: edu_lang}, success: true});
     } catch (error) {
@@ -104,7 +106,8 @@ export const update = async (req: AuthenticatedRequest, res: Response, next: Nex
             direction_code,
             contract_price,
             exam_name,
-            edu_form_id
+            edu_form_id,
+            admission_type_id,
         } = req.body;
 
         const eduDirection = await eduDirectionRepository.findOneBy({id: Number(id), deleted: false});
@@ -121,6 +124,7 @@ export const update = async (req: AuthenticatedRequest, res: Response, next: Nex
         if (exam_name !== undefined) eduDirection.exam_name = exam_name;
         if (edu_lang_ids !== undefined) eduDirection.edu_lang_ids = edu_lang_ids;
         if (edu_form_id !== undefined) eduDirection.edu_form_id = edu_form_id;
+        if (admission_type_id !== undefined) eduDirection.admission_type_id = admission_type_id;
 
 
         await eduDirectionRepository.save(eduDirection);

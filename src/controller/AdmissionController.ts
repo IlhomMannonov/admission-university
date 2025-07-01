@@ -200,8 +200,16 @@ export const choice_admission_type = async (req: AuthenticatedRequest, res: Resp
 
 export const edu_data_select_options = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
+        let user_admission = await admissionRepository.findOne({
+            where: {user_id: req.user.id, deleted: false},
+            relations: ['admission_type'],
+        })
+        if (!user_admission) throw RestException.badRequest("Avalgi malumotni to'ldiring")
+
+
+
         const eduDirections = await eduDirectionRepository.find({
-            where: {deleted: false},
+            where: {deleted: false, admission_type_id: user_admission.admission_type_id},
             select: ['id', 'name_uz', 'name_en', 'name_ru', 'edu_lang_ids','edu_form_id']
         });
 
