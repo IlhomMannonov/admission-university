@@ -74,9 +74,7 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
 
                        json_build_object(
                                'id', at.id,
-                               'name_uz', at.name_uz,
-                               'name_ru', at.name_ru,
-                               'name_en', at.name_en
+                               'name_uz', at.name
                        ) AS admission_type
 
                 FROM edu_direction ed
