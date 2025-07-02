@@ -61,13 +61,23 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
                        ed.contract_price,
                        ed.exam_name,
                        ed.edu_form_id,
+                       ed.admission_type_id,
 
-                       json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs, json_build_object(
-                        'id', ef.id,
-                        'name_uz', ef.name_uz,
-                        'name_ru', ef.name_ru,
-                        'name_en', ef.name_en
-                                                                                     ) AS edu_form
+                       json_agg(el.*) FILTER (WHERE el.id IS NOT NULL) AS edu_langs,
+
+                    json_build_object(
+                            'id', ef.id,
+                            'name_uz', ef.name_uz,
+                            'name_ru', ef.name_ru,
+                            'name_en', ef.name_en
+                    ) AS edu_form,
+
+                       json_build_object(
+                               'id', at.id,
+                               'name_uz', at.name_uz,
+                               'name_ru', at.name_ru,
+                               'name_en', at.name_en
+                       ) AS admission_type
 
                 FROM edu_direction ed
 
@@ -80,9 +90,11 @@ export const getAll = async (req: AuthenticatedRequest, res: Response, next: Nex
 
                          LEFT JOIN edu_form ef ON ef.id = ed.edu_form_id AND ef.deleted = false
 
+                         LEFT JOIN admission_type at ON at.id = ed.admission_type_id AND at.deleted = false
+
                 WHERE ed.deleted = false
 
-                GROUP BY ed.id, ef.id
+                GROUP BY ed.id, ef.id, at.id
 
                 ORDER BY ed.created_at DESC
             `);
